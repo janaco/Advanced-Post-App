@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -42,6 +43,7 @@
                 android:paddingEnd="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
+                android:id="@+id/btn_post"
                 android:paddingStart="10dp"
                 android:text="@string/post"
                 android:textAllCaps="true"
@@ -52,6 +54,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:id="@+id/btn_story"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
                 android:letterSpacing="0.04"
@@ -82,26 +85,26 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/content"
-        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@+id/bottom_bar"
-        android:layout_height="match_parent">
+        android:layout_below="@+id/toolbar">
 
 
         <TextView
+            style="@style/TextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:fontFamily="sans-serif"
             android:layout_centerInParent="true"
-            style="@style/TextStyle"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:lineSpacingExtra="6sp"
+            android:id="@+id/text_view"
+            android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:hint="@string/what_is_new"
-            />
+            android:lineSpacingExtra="6sp"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
@@ -115,13 +118,62 @@
         <View
             android:id="@+id/bottom_delimiter"
             android:layout_width="match_parent"
+            android:alpha="0.12"
             android:layout_height="0.5dp"
             android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:orientation="horizontal"></LinearLayout>
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_weight="0.4">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:id="@+id/thumbnails_list"
+                    tools:listitem="@layout/item_thumbnail"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:alpha="0.12"
+                android:layout_height="match_parent"
+                android:background="@color/black" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6">
+                
+                <TextView
+                    android:enabled="false"
+                    android:text="@string/send"
+                    android:layout_width="wrap_content"
+                    android:textSize="13sp"
+                    android:paddingLeft="16dp"
+                    android:paddingStart="16dp"
+                    android:id="@+id/btn_send"
+                    android:paddingRight="16dp"
+                    android:paddingEnd="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:textColor="@color/white"
+                    android:letterSpacing="0.04"
+                    android:gravity="center"
+                    android:background="@drawable/send_button_fon"
+                    android:layout_height="32dp" />
+                
+            </RelativeLayout>
+            
+
+        </LinearLayout>
 
 
     </LinearLayout>

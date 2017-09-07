@@ -1,0 +1,14 @@
+package com.nandy.vkchanllenge.ui.view;
+
+import com.nandy.vkchanllenge.BaseView;
+
+import java.util.List;
+
+/**
+ * Created by yana on 07.09.17.
+ */
+
+public interface PostView<Presenter> extends BaseView<Presenter> {
+
+    void setThumbnails(List<Integer> thumbnails);
+}
