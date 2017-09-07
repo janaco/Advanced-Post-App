@@ -1,7 +1,8 @@
 package com.nandy.vkchanllenge.ui.presenter;
 
 import com.nandy.vkchanllenge.BasePresenter;
-import com.nandy.vkchanllenge.ui.model.ThumnailsListModel;
+import com.nandy.vkchanllenge.R;
+import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 import com.nandy.vkchanllenge.ui.view.PostView;
 
 /**
@@ -12,21 +13,28 @@ public class PostPresenter implements BasePresenter{
 
     private PostView<PostPresenter> view;
 
-    private ThumnailsListModel thumnailsListModel;
+    private BackgroundModel backgroundModel;
 
     public PostPresenter(PostView<PostPresenter> view){
         this.view = view;
-        this.thumnailsListModel = new ThumnailsListModel();
+    }
+
+    public void setBackgroundModel(BackgroundModel backgroundModel) {
+        this.backgroundModel = backgroundModel;
     }
 
     @Override
     public void start() {
-        view.setThumbnails(thumnailsListModel.getThumbnails());
+        view.setThumbnails(backgroundModel.getThumbnails());
     }
 
     @Override
     public void destroy() {
 
+    }
+
+    public void onThumbnailSelected(int thumbnailsResId){
+                view.setBackground(backgroundModel.loadBackground(thumbnailsResId));
     }
 
 }

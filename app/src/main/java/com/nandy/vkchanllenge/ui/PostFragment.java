@@ -1,13 +1,18 @@
 package com.nandy.vkchanllenge.ui;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,6 +20,7 @@ import com.nandy.vkchanllenge.MyFragment;
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.adapter.ThumbnailsAdapter;
+import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 import com.nandy.vkchanllenge.ui.presenter.PostPresenter;
 import com.nandy.vkchanllenge.ui.view.PostView;
 
@@ -31,11 +37,13 @@ import butterknife.OnClick;
 public class PostFragment extends MyFragment implements PostView<PostPresenter>, OnListItemClickListener<Integer> {
 
     @BindView(R.id.text_view)
-    TextView textView;
+    EditText textView;
     @BindView(R.id.content)
     RelativeLayout contentView;
     @BindView(R.id.thumbnails_list)
     RecyclerView thumbnailsList;
+    @BindView(R.id.background_view)
+    ImageView backgroundView;
 
     private PostPresenter presenter;
     private ThumbnailsAdapter thumbnailsAdapter;
@@ -62,33 +70,33 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     }
 
     @OnClick(R.id.btn_font)
-    void onFontButtonClick(){
+    void onFontButtonClick() {
 
     }
 
     @OnClick(R.id.btn_sticker)
-    void onStickersButtonClick(){
+    void onStickersButtonClick() {
 
     }
 
     @OnClick(R.id.btn_post)
-    void onPostButtonClick(){
+    void onPostButtonClick() {
 
     }
 
     @OnClick(R.id.btn_story)
-    void onStoryButtonClick(){
+    void onStoryButtonClick() {
 
     }
 
     @OnClick(R.id.btn_send)
-    void onSendButtonClick(){
+    void onSendButtonClick() {
 
     }
 
     @Override
-    public void onListItemClick(Integer integer, int position) {
-
+    public void onListItemClick(Integer thumnailId, int position) {
+        presenter.onThumbnailSelected(thumnailId);
     }
 
 
@@ -100,14 +108,24 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     }
 
     @Override
+    public void setBackground(Drawable background) {
+        Log.d("BACKGROUND_", "drawable: " + background);
+        backgroundView.setImageDrawable(background);
+    }
+
+    @Override
     public void setPresenter(PostPresenter presenter) {
         this.presenter = presenter;
     }
 
-    public static PostFragment newInstance(){
+    public static PostFragment newInstance(Context context) {
 
         PostFragment fragment = new PostFragment();
-        fragment.setPresenter(new PostPresenter(fragment));
+
+        PostPresenter presenter = new PostPresenter(fragment);
+        presenter.setBackgroundModel(new BackgroundModel(context));
+
+        fragment.setPresenter(presenter);
 
         return fragment;
     }
