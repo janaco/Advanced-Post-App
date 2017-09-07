@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">VK Chanllenge</string>
+
+    <string name="story">История</string>
+    <string name="post">Запись</string>
+    <string name="what_is_new">Что у Вас нового?</string>
 </resources>
