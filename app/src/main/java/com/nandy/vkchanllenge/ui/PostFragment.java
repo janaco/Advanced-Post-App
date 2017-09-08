@@ -1,12 +1,14 @@
 package com.nandy.vkchanllenge.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.text.Spannable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,12 +22,14 @@ import android.widget.TextView;
 import com.nandy.vkchanllenge.MyFragment;
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
+import com.nandy.vkchanllenge.RoundedBackgroundSpan;
 import com.nandy.vkchanllenge.adapter.ThumbnailsAdapter;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 import com.nandy.vkchanllenge.ui.model.TextModel;
 import com.nandy.vkchanllenge.ui.presenter.PostPresenter;
 import com.nandy.vkchanllenge.ui.view.PostView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -73,7 +77,8 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @OnClick(R.id.btn_font)
     void onFontButtonClick() {
-        presenter.highlightText(textView.getText().toString());
+        presenter.highlightText(textView.getLayout());
+
     }
 
     @OnClick(R.id.btn_sticker)

@@ -19,7 +19,9 @@
     <color name="cornflower_blue">#5692d7</color>
     <color name="aqua_marine">#30f3d2</color>
     <color name="gradient_blue">#2e7ae6</color>
-<color name="sickly_yellow">#cbe645</color>
+    <color name="sickly_yellow">#cbe645</color>
     <color name="cornflower_blue_two_a48">#48528bcc</color>
-
-    </resources>
+    <color name="black_a24">#242c2d2e</color>
+    <color name="highlight">#5cffffff</color>
+    <color name="transparent">#00ffffff</color>
+</resources>

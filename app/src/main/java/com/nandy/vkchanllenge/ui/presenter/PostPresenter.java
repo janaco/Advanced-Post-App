@@ -1,6 +1,8 @@
 package com.nandy.vkchanllenge.ui.presenter;
 
+import android.text.Layout;
 import android.text.Spannable;
+import android.text.TextPaint;
 import android.text.style.BackgroundColorSpan;
 
 import com.nandy.vkchanllenge.BasePresenter;
@@ -46,8 +48,8 @@ public class PostPresenter implements BasePresenter{
                 view.setBackground(backgroundModel.loadBackground(thumbnailsResId));
     }
 
-    public void highlightText(String text){
-        view.highlight(textModel.highlightText(text));
+    public void highlightText(Layout layout){
+        view.highlight(textModel.highlightText(layout));
 
     }
 

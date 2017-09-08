@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -35,6 +35,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/btn_post"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:fontFamily="sans-serif-medium"
@@ -43,7 +44,6 @@
                 android:paddingEnd="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:id="@+id/btn_post"
                 android:paddingStart="10dp"
                 android:text="@string/post"
                 android:textAllCaps="true"
@@ -52,9 +52,9 @@
                 android:textStyle="normal" />
 
             <TextView
+                android:id="@+id/btn_story"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/btn_story"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
                 android:letterSpacing="0.04"
@@ -82,6 +82,13 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/ic_toolbar_sticker" />
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            android:alpha="0.12"
+            android:background="@color/black" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -93,30 +100,32 @@
 
         <ImageView
 
-android:src="@mipmap/bg_stars_center"
+            android:id="@+id/background_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/background_view"
             android:scaleType="centerCrop"
-            />
+            android:src="@drawable/fon_white" />
 
         <EditText
-            style="@style/TextStyle"
+            android:id="@+id/text_view"
+            style="@style/TextStyle5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_margin="24dp"
+            android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingRight="5dp"
+            android:paddingEnd="5dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:background="@null"
+            android:hint="@string/what_is_new"
             android:shadowColor="#1e000000"
             android:shadowDy="0.5"
-            android:text="hdjhsjd"
-            android:id="@+id/text_view"
-            android:fontFamily="sans-serif"
-            android:gravity="center_horizontal"
-            android:hint="@string/what_is_new"
-            android:lineSpacingExtra="6sp"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:text="Отправляюсь в отпуск до 10 сентября. Отвечать буду медленно. Если что-то срочное, упоминайте в беседах или звоните."
+            android:textColorHint="@color/black_a24" />
+
 
     </RelativeLayout>
 
@@ -130,8 +139,8 @@ android:src="@mipmap/bg_stars_center"
         <View
             android:id="@+id/bottom_delimiter"
             android:layout_width="match_parent"
-            android:alpha="0.12"
             android:layout_height="0.5dp"
+            android:alpha="0.12"
             android:background="@color/black" />
 
         <LinearLayout
@@ -142,48 +151,48 @@ android:src="@mipmap/bg_stars_center"
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:layout_weight="0.4">
+                android:layout_weight="0.4"
+                android:gravity="center_vertical">
 
                 <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
                     android:id="@+id/thumbnails_list"
-                    tools:listitem="@layout/item_thumbnail"
-                    android:layout_height="match_parent" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/item_thumbnail" />
             </RelativeLayout>
 
             <View
                 android:layout_width="0.5dp"
-                android:alpha="0.12"
                 android:layout_height="match_parent"
+                android:alpha="0.12"
                 android:background="@color/black" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:gravity="center"
                 android:layout_height="match_parent"
-                android:layout_weight="0.6">
-                
+                android:layout_weight="0.6"
+                android:gravity="center">
+
                 <TextView
-                    android:enabled="false"
-                    android:text="@string/send"
-                    android:layout_width="wrap_content"
-                    android:textSize="13sp"
-                    android:paddingLeft="16dp"
-                    android:paddingStart="16dp"
                     android:id="@+id/btn_send"
-                    android:paddingRight="16dp"
-                    android:paddingEnd="16dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textStyle="normal"
-                    android:textColor="@color/white"
-                    android:letterSpacing="0.04"
-                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
                     android:background="@drawable/send_button_fon"
-                    android:layout_height="32dp" />
-                
+                    android:enabled="false"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:letterSpacing="0.04"
+                    android:paddingEnd="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingStart="16dp"
+                    android:text="@string/send"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:textStyle="normal" />
+
             </RelativeLayout>
-            
+
 
         </LinearLayout>
 
