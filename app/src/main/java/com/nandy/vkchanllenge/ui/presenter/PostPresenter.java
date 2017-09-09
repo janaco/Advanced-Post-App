@@ -1,9 +1,12 @@
 package com.nandy.vkchanllenge.ui.presenter;
 
+import android.graphics.Bitmap;
 import android.text.Layout;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.nandy.vkchanllenge.BasePresenter;
+import com.nandy.vkchanllenge.ui.StickersDialog;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 import com.nandy.vkchanllenge.ui.model.PostModel;
 import com.nandy.vkchanllenge.ui.model.StickersModel;
@@ -17,7 +20,7 @@ import io.reactivex.functions.Consumer;
  * Created by yana on 07.09.17.
  */
 
-public class PostPresenter implements BasePresenter {
+public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSelectedListener {
 
     private PostView<PostPresenter> view;
 
@@ -68,6 +71,11 @@ public class PostPresenter implements BasePresenter {
         }
     }
 
+    @Override
+    public void onStickerSelected(Bitmap bitmap) {
+        view.addSticker(stickersModel.createStickerView(bitmap));
+    }
+
     public void onThumbnailSelected(int thumbnailsResId) {
         view.setBackground(backgroundModel.loadBackground(thumbnailsResId));
     }
@@ -78,7 +86,7 @@ public class PostPresenter implements BasePresenter {
     }
 
     public void loadStickers() {
-        view.showStickersPopup(stickersModel.getStickers(), stickersModel);
+        view.showStickersPopup(stickersModel.getStickers(), this);
     }
 
     public void post(View view) {

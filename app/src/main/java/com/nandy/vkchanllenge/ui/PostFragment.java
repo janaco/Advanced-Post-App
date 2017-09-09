@@ -126,6 +126,11 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     }
 
     @Override
+    public void addSticker(ImageView imageView) {
+        contentView.addView(imageView, contentView.getChildCount()-1);
+    }
+
+    @Override
     public void onPostResult(boolean success) {
         //TODO: it's temporary implementation
         Toast.makeText(getContext(), success ? "Successfully saved" : "Failed to save", Toast.LENGTH_SHORT).show();

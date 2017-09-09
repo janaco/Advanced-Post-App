@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.nandy.vkchanllenge.ui.StickersDialog;
 
@@ -22,7 +25,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by yana on 09.09.17.
  */
 
-public class StickersModel implements StickersDialog.OnStickerSelectedListener{
+public class StickersModel{
 
     private Context context;
     private final List<Bitmap> stickers = new ArrayList<>();
@@ -57,8 +60,11 @@ public class StickersModel implements StickersDialog.OnStickerSelectedListener{
         return stickers;
     }
 
-    @Override
-    public void onStickerSelected(Bitmap bitmap) {
+   public ImageView createStickerView(Bitmap bitmap){
+        ImageView imageView = new ImageView(context);
+        imageView.setImageBitmap(bitmap);
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
-    }
+        return imageView;
+   }
 }

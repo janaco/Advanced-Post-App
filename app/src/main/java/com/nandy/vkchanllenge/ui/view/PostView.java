@@ -3,6 +3,7 @@ package com.nandy.vkchanllenge.ui.view;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
+import android.widget.ImageView;
 
 import com.nandy.vkchanllenge.BaseView;
 import com.nandy.vkchanllenge.ui.StickersDialog;
@@ -24,4 +25,6 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
     void showStickersPopup(List<Bitmap> stickers, StickersDialog.OnStickerSelectedListener listener);
 
     void onPostResult(boolean success);
+
+    void addSticker(ImageView imageView);
 }
