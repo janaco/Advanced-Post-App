@@ -91,43 +91,51 @@
             android:background="@color/black" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/content"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="360dp"
         android:layout_above="@+id/bottom_bar"
-        android:layout_below="@+id/toolbar">
+        android:layout_below="@+id/toolbar"
+        android:gravity="center">
 
-        <ImageView
-
-            android:id="@+id/background_view"
+        <RelativeLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/fon_white" />
+            android:layout_height="360dp"
+            android:layout_centerVertical="true">
 
-        <EditText
-            android:id="@+id/text_view"
-            style="@style/TextStyle5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="24dp"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
-            android:paddingRight="5dp"
-            android:paddingEnd="5dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:background="@null"
-            android:hint="@string/what_is_new"
-            android:shadowColor="#1e000000"
-            android:shadowDy="0.5"
-            android:text="Отправляюсь в отпуск до 10 сентября. Отвечать буду медленно. Если что-то срочное, упоминайте в беседах или звоните."
-            android:textColorHint="@color/black_a24" />
+            <ImageView
+
+                android:id="@+id/background_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/gradient_blue" />
+
+            <EditText
+                android:id="@+id/text_view"
+                style="@style/TextStyle5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="24dp"
+                android:background="@null"
+                android:hint="@string/what_is_new"
+                android:paddingBottom="15dp"
+                android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingStart="5dp"
+                android:paddingTop="15dp"
+                android:shadowColor="#1e000000"
+                android:shadowDy="0.5"
+                android:text="Отправляюсь в отпуск до 10 сентября. Отвечать буду медленно. Если что-то срочное, упоминайте в беседах или звоните."
+                android:textColorHint="@color/black_a24" />
 
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/bottom_bar"
