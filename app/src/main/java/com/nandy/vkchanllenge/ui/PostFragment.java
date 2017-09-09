@@ -1,35 +1,30 @@
 package com.nandy.vkchanllenge.ui;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.text.Spannable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.nandy.vkchanllenge.MyFragment;
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
-import com.nandy.vkchanllenge.RoundedBackgroundSpan;
 import com.nandy.vkchanllenge.adapter.ThumbnailsAdapter;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
+import com.nandy.vkchanllenge.ui.model.StickersModel;
 import com.nandy.vkchanllenge.ui.model.TextModel;
 import com.nandy.vkchanllenge.ui.presenter.PostPresenter;
 import com.nandy.vkchanllenge.ui.view.PostView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -83,7 +78,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @OnClick(R.id.btn_sticker)
     void onStickersButtonClick() {
-
+        presenter.loadStickers();
     }
 
     @OnClick(R.id.btn_post)
@@ -125,6 +120,11 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     }
 
     @Override
+    public void showStickersPopup(List<Bitmap> stickers, StickersDialog.OnStickerSelectedListener listener) {
+        StickersDialog.show(getContext(), stickers, listener);
+    }
+
+    @Override
     public void setPresenter(PostPresenter presenter) {
         this.presenter = presenter;
     }
@@ -136,6 +136,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
         PostPresenter presenter = new PostPresenter(fragment);
         presenter.setBackgroundModel(new BackgroundModel(context));
         presenter.setTextModel(new TextModel(context));
+        presenter.setStickersModel(new StickersModel(context));
 
         fragment.setPresenter(presenter);
 
