@@ -14,12 +14,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.nandy.vkchanllenge.MyFragment;
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.adapter.ThumbnailsAdapter;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
+import com.nandy.vkchanllenge.ui.model.PostModel;
 import com.nandy.vkchanllenge.ui.model.StickersModel;
 import com.nandy.vkchanllenge.ui.model.TextModel;
 import com.nandy.vkchanllenge.ui.presenter.PostPresenter;
@@ -83,7 +85,6 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @OnClick(R.id.btn_post)
     void onPostButtonClick() {
-
     }
 
     @OnClick(R.id.btn_story)
@@ -93,7 +94,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @OnClick(R.id.btn_send)
     void onSendButtonClick() {
-
+        presenter.post(contentView);
     }
 
     @Override
@@ -125,6 +126,13 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     }
 
     @Override
+    public void onPostResult(boolean success) {
+        //TODO: it's temporary implementation
+        Toast.makeText(getContext(), success ? "Successfully saved" : "Failed to save", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
     public void setPresenter(PostPresenter presenter) {
         this.presenter = presenter;
     }
@@ -137,6 +145,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
         presenter.setBackgroundModel(new BackgroundModel(context));
         presenter.setTextModel(new TextModel(context));
         presenter.setStickersModel(new StickersModel(context));
+        presenter.setPostModel(new PostModel());
 
         fragment.setPresenter(presenter);
 

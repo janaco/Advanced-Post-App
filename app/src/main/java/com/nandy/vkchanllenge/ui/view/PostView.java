@@ -22,4 +22,6 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
     void highlight(Spannable spannableText);
 
     void showStickersPopup(List<Bitmap> stickers, StickersDialog.OnStickerSelectedListener listener);
+
+    void onPostResult(boolean success);
 }
