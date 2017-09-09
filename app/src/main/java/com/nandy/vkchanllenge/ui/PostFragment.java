@@ -27,6 +27,7 @@ import com.nandy.vkchanllenge.ui.model.TextModel;
 import com.nandy.vkchanllenge.ui.presenter.PostPresenter;
 import com.nandy.vkchanllenge.ui.view.PostView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -37,7 +38,7 @@ import butterknife.OnClick;
  * Created by yana on 07.09.17.
  */
 
-public class PostFragment extends MyFragment implements PostView<PostPresenter>, OnListItemClickListener<Integer> {
+public class PostFragment extends MyFragment implements PostView<PostPresenter>, OnListItemClickListener<Background> {
 
     @BindView(R.id.text_view)
     EditText textView;
@@ -47,6 +48,8 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     RecyclerView thumbnailsList;
     @BindView(R.id.background_view)
     ImageView backgroundView;
+
+    private final List<ImageView> imageParts = new ArrayList<>();
 
     private PostPresenter presenter;
     private ThumbnailsAdapter thumbnailsAdapter;
@@ -98,20 +101,24 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     }
 
     @Override
-    public void onListItemClick(Integer thumnailId, int position) {
-        presenter.onThumbnailSelected(thumnailId);
+    public void onListItemClick(Background background, int position) {
+        presenter.onThumbnailSelected(background);
     }
 
 
     @Override
-    public void setThumbnails(List<Integer> thumbnails) {
-        thumbnailsAdapter = new ThumbnailsAdapter(thumbnails);
+    public void setThumbnails(Background []background) {
+        thumbnailsAdapter = new ThumbnailsAdapter(background);
         thumbnailsAdapter.setOnListItemClickListener(this);
         thumbnailsList.setAdapter(thumbnailsAdapter);
     }
 
     @Override
     public void setBackground(Drawable background) {
+        for (ImageView imageView: imageParts){
+            contentView.removeView(imageView);
+        }
+        imageParts.clear();
         backgroundView.setImageDrawable(background);
     }
 
@@ -128,6 +135,12 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     @Override
     public void addSticker(ImageView imageView) {
         contentView.addView(imageView, contentView.getChildCount()-1);
+    }
+
+    @Override
+    public void addBackgroundPart(ImageView imageView) {
+        contentView.addView(imageView, 1);
+        imageParts.add(imageView);
     }
 
     @Override

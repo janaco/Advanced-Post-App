@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
+import com.nandy.vkchanllenge.ui.Background;
 
 import java.util.List;
 
@@ -22,12 +23,12 @@ import butterknife.OnClick;
 
 public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.ViewHolder> {
 
-    private List<Integer> thumbnailsResList;
-    private OnListItemClickListener<Integer> onListItemClickListener;
+    private Background []backgrounds;
+    private OnListItemClickListener<Background> onListItemClickListener;
 
 
-    public ThumbnailsAdapter(List<Integer> thumbnailsResList) {
-        this.thumbnailsResList = thumbnailsResList;
+    public ThumbnailsAdapter(Background []backgrounds) {
+        this.backgrounds = backgrounds;
     }
 
     @Override
@@ -38,19 +39,19 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        int drawableRes = thumbnailsResList.get(position);
+       Background background = backgrounds[position];
 
-        holder.thumbnailView.setImageResource(drawableRes);
+        holder.thumbnailView.setImageResource(background.getThumbnailId());
         holder.thumbnailView.setOnClickListener(view ->
-                onListItemClickListener.onListItemClick(drawableRes, holder.getAdapterPosition()));
+                onListItemClickListener.onListItemClick(background, holder.getAdapterPosition()));
     }
 
     @Override
     public int getItemCount() {
-        return thumbnailsResList.size();
+        return backgrounds.length;
     }
 
-    public void setOnListItemClickListener(OnListItemClickListener<Integer> onListItemClickListener) {
+    public void setOnListItemClickListener(OnListItemClickListener<Background> onListItemClickListener) {
         this.onListItemClickListener = onListItemClickListener;
     }
 

@@ -2,10 +2,14 @@ package com.nandy.vkchanllenge.ui.presenter;
 
 import android.graphics.Bitmap;
 import android.text.Layout;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.nandy.vkchanllenge.BasePresenter;
+import com.nandy.vkchanllenge.ui.Background;
+import com.nandy.vkchanllenge.ui.BackgroundType;
+import com.nandy.vkchanllenge.ui.Part;
 import com.nandy.vkchanllenge.ui.StickersDialog;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 import com.nandy.vkchanllenge.ui.model.PostModel;
@@ -76,8 +80,19 @@ public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSel
         view.addSticker(stickersModel.createStickerView(bitmap));
     }
 
-    public void onThumbnailSelected(int thumbnailsResId) {
-        view.setBackground(backgroundModel.loadBackground(thumbnailsResId));
+    public void onThumbnailSelected(Background background) {
+        if (background.getType() == BackgroundType.CUSTOM){
+            return;
+        }
+        view.setBackground(backgroundModel.loadBackground(background));
+
+        if (background.getParts()  != null){
+
+            for (Part part: background.getParts()){
+                view.addBackgroundPart(backgroundModel.loadPart(part));
+            }
+
+        }
     }
 
     public void highlightText(Layout layout) {

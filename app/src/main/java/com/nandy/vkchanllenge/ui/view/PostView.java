@@ -6,6 +6,7 @@ import android.text.Spannable;
 import android.widget.ImageView;
 
 import com.nandy.vkchanllenge.BaseView;
+import com.nandy.vkchanllenge.ui.Background;
 import com.nandy.vkchanllenge.ui.StickersDialog;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public interface PostView<Presenter> extends BaseView<Presenter> {
 
-    void setThumbnails(List<Integer> thumbnails);
+    void setThumbnails(Background []backgrounds);
 
     void setBackground(Drawable background);
 
@@ -27,4 +28,6 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
     void onPostResult(boolean success);
 
     void addSticker(ImageView imageView);
+
+    void addBackgroundPart(ImageView imageView);
 }
