@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.nandy.vkchanllenge.MyFragment;
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
+import com.nandy.vkchanllenge.adapter.ImagesAdapter;
 import com.nandy.vkchanllenge.adapter.ThumbnailsAdapter;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 import com.nandy.vkchanllenge.ui.model.PostModel;
@@ -48,6 +50,8 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     RecyclerView thumbnailsList;
     @BindView(R.id.background_view)
     ImageView backgroundView;
+    @BindView(R.id.images_grid)
+    GridView imagesGrid;
 
     private final List<ImageView> imageParts = new ArrayList<>();
 
@@ -148,6 +152,11 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
         //TODO: it's temporary implementation
         Toast.makeText(getContext(), success ? "Successfully saved" : "Failed to save", Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void setImagesAdapter(ImagesAdapter imagesAdapter) {
+        imagesGrid.setAdapter(imagesAdapter);
     }
 
     @Override

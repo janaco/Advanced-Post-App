@@ -205,6 +205,26 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/layout_images"
+            android:layout_height="208dp">
+
+            <GridView
+                android:id="@+id/images_grid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:horizontalSpacing="8dp"
+                android:numColumns="4"
+                android:padding="12dp"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="8dp"
+                tools:listitem="@layout/item_sticker"/>
+
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 

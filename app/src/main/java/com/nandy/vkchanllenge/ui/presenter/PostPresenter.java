@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.nandy.vkchanllenge.BasePresenter;
+import com.nandy.vkchanllenge.adapter.ImagesAdapter;
 import com.nandy.vkchanllenge.ui.Background;
 import com.nandy.vkchanllenge.ui.BackgroundType;
 import com.nandy.vkchanllenge.ui.Part;
@@ -16,6 +17,9 @@ import com.nandy.vkchanllenge.ui.model.PostModel;
 import com.nandy.vkchanllenge.ui.model.StickersModel;
 import com.nandy.vkchanllenge.ui.model.TextModel;
 import com.nandy.vkchanllenge.ui.view.PostView;
+
+import java.io.File;
+import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -36,6 +40,7 @@ public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSel
 
     private Disposable stickersSubscription;
     private Disposable postSubscription;
+    private Disposable imagesSubscription;
 
     public PostPresenter(PostView<PostPresenter> view) {
         this.view = view;
@@ -61,6 +66,10 @@ public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSel
     public void start() {
         view.setThumbnails(backgroundModel.getThumbnails());
         stickersSubscription = stickersModel.loadStickers().subscribe();
+        imagesSubscription = backgroundModel.loadImages().subscribe(files -> {
+            ImagesAdapter adapter = new ImagesAdapter(files);
+            view.setImagesAdapter(adapter);
+        });
     }
 
     @Override
@@ -72,6 +81,10 @@ public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSel
 
         if (postSubscription != null && !postSubscription.isDisposed()) {
             postSubscription.dispose();
+        }
+
+        if (imagesSubscription != null && !imagesSubscription.isDisposed()){
+            imagesSubscription.dispose();
         }
     }
 
