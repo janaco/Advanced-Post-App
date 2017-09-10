@@ -11,9 +11,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     
-    <com.nandy.vkchanllenge.CheckableImageButton
+    <ImageView
         android:id="@+id/thumbnail_view"
-        android:background="@drawable/checkable_image_selector"
         android:src="@mipmap/thumb_stars"
         android:layout_width="32dp"
         android:layout_height="32dp" />
