@@ -36,14 +36,14 @@ public class RoundedCornersTransformation implements Transformation<Bitmap> {
     private int mDiameter;
     private int mMargin;
     private CornerType mCornerType;
-    private String mColor;
+    private int mColor = Color.BLACK;
     private int mBorder;
 
     public RoundedCornersTransformation(Context context, int radius, int margin) {
         this(context, radius, margin, CornerType.ALL);
     }
 
-    public RoundedCornersTransformation(Context context, int radius, int margin, String color, int border) {
+    public RoundedCornersTransformation(Context context, int radius, int margin, int color, int border) {
         this(context, radius, margin, CornerType.BORDER);
         mColor = color;
         mBorder = border;
@@ -139,7 +139,7 @@ public class RoundedCornersTransformation implements Transformation<Bitmap> {
                 drawDiagonalFromTopRightRoundRect(canvas, paint, right, bottom);
                 break;
             case BORDER:
-                drawBorder(canvas, paint, right, bottom);
+                drawBorder(canvas, paint, width, height);
                 break;
             default:
                 canvas.drawRoundRect(new RectF(mMargin, mMargin, right, bottom), mRadius, mRadius, paint);
@@ -252,25 +252,39 @@ public class RoundedCornersTransformation implements Transformation<Bitmap> {
         canvas.drawRect(new RectF(mMargin + mRadius, mMargin + mRadius, right, bottom), paint);
     }
 
-    private void drawBorder(Canvas canvas, Paint paint, float right,
-                            float bottom) {
+//    private void drawBorder(Canvas canvas, Paint paint, float right,
+//                            float bottom) {
+//
+//        // stroke
+//        Paint strokePaint = new Paint();
+//        strokePaint.setStyle(Paint.Style.STROKE);
+//        strokePaint.setColor(mColor);
+//        strokePaint.setStrokeWidth(mBorder);
+//
+//        canvas.drawRect(new RectF(mMargin, mMargin, right, bottom), paint);
+//
+//        // stroke
+//        canvas.drawRoundRect(new RectF(mMargin, mMargin, right, bottom), mRadius, mRadius, strokePaint);
+//    }
+
+
+    private void drawBorder(Canvas canvas, Paint paint, float width,
+                            float height) {
 
         // stroke
         Paint strokePaint = new Paint();
         strokePaint.setStyle(Paint.Style.STROKE);
-        if (mColor != null) {
-            strokePaint.setColor(Color.parseColor(mColor));
-        } else {
-            strokePaint.setColor(Color.BLACK);
-        }
+        strokePaint.setColor(Color.WHITE);
         strokePaint.setStrokeWidth(mBorder);
 
-        canvas.drawRoundRect(new RectF(mMargin, mMargin, right, bottom), mRadius, mRadius, paint);
+        canvas.drawRect(new RectF(mMargin*2, mMargin*2, width-mMargin*2, height-mMargin*2),  paint);
 
+        canvas.drawRoundRect(new RectF(mMargin, mMargin, width-mMargin, height-mMargin), mRadius, mRadius, strokePaint);
+
+        strokePaint.setColor(mColor);
         // stroke
-        canvas.drawRoundRect(new RectF(mMargin, mMargin, right, bottom), mRadius, mRadius, strokePaint);
+        canvas.drawRoundRect(new RectF(mMargin/2, mMargin/2, width - mMargin/2, height - mMargin/2), mRadius, mRadius, strokePaint);
     }
-
 
 
     public String getId() {

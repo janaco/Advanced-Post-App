@@ -1,6 +1,7 @@
 package com.nandy.vkchanllenge.adapter;
 
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +27,11 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
 
     private static final int VIEW_CAMERA = 0;
     private static final int VIEW_ALBUM = 1;
+    private static final int VIEW_IMAGE = 2;
 
 
     private List<String> files;
-    private int checkedPosition = 0;
+    private int checkedPosition = VIEW_IMAGE;
 
     public ImagesAdapter(List<String> files) {
         this.files = files;
@@ -52,16 +54,30 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
             holder.imageView.setImageResource(R.drawable.thumb_gallery);
         } else {
 
+            boolean checked = position == checkedPosition;
             position -= 2;
+
             String path = files.get(position);
 
-            Glide
-                    .with(holder.imageView.getContext())
-                    .load(Uri.fromFile(new File(path)))
-                    .override(252, 252)
-                    .bitmapTransform(new CenterCrop(holder.imageView.getContext()),
-                            new RoundedCornersTransformation(holder.imageView.getContext(), 12, 2))
-                    .into(holder.imageView);
+            if (checked) {
+
+                Glide
+                        .with(holder.imageView.getContext())
+                        .load(Uri.fromFile(new File(path)))
+                        .override(252, 252)
+                        .bitmapTransform(new CenterCrop(holder.imageView.getContext()),
+                                new RoundedCornersTransformation(holder.imageView.getContext(), 12, 6, ContextCompat.getColor(holder.imageView.getContext(), R.color.cornflower_blue_two), 6))
+                                        .into(holder.imageView);
+            } else {
+
+                Glide
+                        .with(holder.imageView.getContext())
+                        .load(Uri.fromFile(new File(path)))
+                        .override(252, 252)
+                        .bitmapTransform(new CenterCrop(holder.imageView.getContext()),
+                                new RoundedCornersTransformation(holder.imageView.getContext(), 12, 0))
+                        .into(holder.imageView);
+            }
         }
 
         holder.imageView.setOnClickListener(view -> {
