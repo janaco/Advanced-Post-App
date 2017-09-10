@@ -1,8 +1,10 @@
 package com.nandy.vkchanllenge.adapter;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +12,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.request.FutureTarget;
 import com.nandy.vkchanllenge.CheckableImageButton;
 import com.nandy.vkchanllenge.R;
+import com.nandy.vkchanllenge.RoundedCornersTransformation;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +31,8 @@ import butterknife.ButterKnife;
 
 public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder> {
 
-    List<String> files;
+    private List<String> files;
+    private int checkedPosition = 0;
 
     public ImagesAdapter(List<String> files) {
         this.files = files;
@@ -34,20 +41,29 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_image, parent, false));
+                .inflate(R.layout.item_image, parent, false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String path = files.get(position);
-        holder.imageView.setImageBitmap(BitmapFactory.decodeFile(path));
+
+//        holder.imageView.setChecked(checkedPosition == position);
+
 
         Glide
                 .with(holder.imageView.getContext())
                 .load(Uri.fromFile(new File(path)))
                 .override(252, 252)
-                .centerCrop()
+                .bitmapTransform(new CenterCrop(holder.imageView.getContext()),
+                        new RoundedCornersTransformation(holder.imageView.getContext(), 12, 2))
                 .into(holder.imageView);
+
+        holder.imageView.setOnClickListener(view -> {
+            Log.d("IMAGE_", "onClick: " + holder.getAdapterPosition());
+            checkedPosition = holder.getAdapterPosition();
+            notifyDataSetChanged();
+        });
     }
 
     @Override
@@ -61,10 +77,10 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     }
 
 
-    static class ViewHolder  extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.image)
-        CheckableImageButton imageView;
+        ImageView imageView;
 
         ViewHolder(View view) {
             super(view);
