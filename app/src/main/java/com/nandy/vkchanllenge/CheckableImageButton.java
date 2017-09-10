@@ -2,6 +2,14 @@ package com.nandy.vkchanllenge;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.widget.AppCompatImageView;
@@ -78,6 +86,40 @@ public class CheckableImageButton extends AppCompatImageView implements Checkabl
         super.drawableStateChanged();
         invalidate();
     }
+
+    @Override
+    public void setImageBitmap(Bitmap bm) {
+
+        if (!isChecked()){
+            bm = getRoundedBitmap(bm, 4);
+        }
+
+        super.setImageBitmap(bm);
+    }
+
+    private Bitmap getRoundedBitmap(Bitmap srcBitmap, int cornerRadius) {
+        Bitmap dstBitmap = Bitmap.createBitmap(
+                srcBitmap.getWidth(),
+                srcBitmap.getHeight(),
+                Bitmap.Config.ARGB_8888
+        );
+
+        Canvas canvas = new Canvas(dstBitmap);
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+
+        Rect rect = new Rect(0, 0, srcBitmap.getWidth(), srcBitmap.getHeight());
+        RectF rectF = new RectF(rect);
+        canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(srcBitmap, 0, 0, paint);
+        srcBitmap.recycle();
+
+        return dstBitmap;
+    }
+
 
     static class SavedState extends BaseSavedState {
         boolean checked;

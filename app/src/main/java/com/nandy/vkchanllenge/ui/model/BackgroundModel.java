@@ -41,7 +41,7 @@ public class BackgroundModel {
         switch (background.getType()) {
 
             case DRAWABLE:
-                return ContextCompat.getDrawable(context, background.getThumbnailId());
+                return ContextCompat.getDrawable(context, background.getBackgroundId());
 
             case ASSET:
                 return loadFromAssets(background.getImageName());
