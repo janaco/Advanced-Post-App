@@ -210,17 +210,12 @@
             android:id="@+id/layout_images"
             android:layout_height="208dp">
 
-            <GridView
-                android:id="@+id/images_grid"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/images_list"
                 android:layout_width="match_parent"
+                android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:horizontalSpacing="8dp"
-                android:numColumns="4"
-                android:padding="12dp"
-                android:stretchMode="columnWidth"
-                android:verticalSpacing="8dp"
-                tools:listitem="@layout/item_sticker"/>
+                tools:listitem="@layout/item_image" />
 
 
         </RelativeLayout>

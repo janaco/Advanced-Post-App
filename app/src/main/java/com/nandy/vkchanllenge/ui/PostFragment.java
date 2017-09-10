@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -50,8 +51,8 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     RecyclerView thumbnailsList;
     @BindView(R.id.background_view)
     ImageView backgroundView;
-    @BindView(R.id.images_grid)
-    GridView imagesGrid;
+    @BindView(R.id.images_list)
+    RecyclerView imagesList;
 
     private final List<ImageView> imageParts = new ArrayList<>();
 
@@ -69,7 +70,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         thumbnailsList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
+        imagesList.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false));
         presenter.start();
     }
 
@@ -156,7 +157,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @Override
     public void setImagesAdapter(ImagesAdapter imagesAdapter) {
-        imagesGrid.setAdapter(imagesAdapter);
+        imagesList.setAdapter(imagesAdapter);
     }
 
     @Override
