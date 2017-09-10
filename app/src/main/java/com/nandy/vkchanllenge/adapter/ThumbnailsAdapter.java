@@ -1,21 +1,17 @@
 package com.nandy.vkchanllenge.adapter;
 
-import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
+import com.nandy.vkchanllenge.CheckableImageButton;
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.ui.Background;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by yana on 07.09.17.
@@ -23,11 +19,13 @@ import butterknife.OnClick;
 
 public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.ViewHolder> {
 
-    private Background []backgrounds;
+    private Background[] backgrounds;
     private OnListItemClickListener<Background> onListItemClickListener;
 
+    private int checkedPosition = 0;
 
-    public ThumbnailsAdapter(Background []backgrounds) {
+
+    public ThumbnailsAdapter(Background[] backgrounds) {
         this.backgrounds = backgrounds;
     }
 
@@ -39,11 +37,17 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-       Background background = backgrounds[position];
+        Background background = backgrounds[position];
 
+        holder.thumbnailView.setChecked(position == checkedPosition);
         holder.thumbnailView.setImageResource(background.getThumbnailId());
         holder.thumbnailView.setOnClickListener(view ->
-                onListItemClickListener.onListItemClick(background, holder.getAdapterPosition()));
+        {
+            checkedPosition = holder.getAdapterPosition();
+            notifyDataSetChanged();
+            onListItemClickListener.onListItemClick(background, holder.getAdapterPosition());
+        });
+
     }
 
     @Override
@@ -58,7 +62,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.thumbnail_view)
-        ImageView thumbnailView;
+        CheckableImageButton thumbnailView;
 
 
         ViewHolder(View itemView) {
