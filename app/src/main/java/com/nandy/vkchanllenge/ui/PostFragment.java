@@ -102,6 +102,13 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     }
 
+    @OnClick(R.id.text_view)
+    void onInputClick(){
+        if (pickerView.isShowed()) {
+            pickerView.dismiss();
+        }
+    }
+
     @OnClick(R.id.btn_send)
     void onSendButtonClick() {
         presenter.post(contentView);
@@ -167,6 +174,15 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     @Override
     public void setPresenter(PostPresenter presenter) {
         this.presenter = presenter;
+    }
+
+    public boolean onBackPressed(){
+        if (pickerView.isShowed()){
+            pickerView.dismiss();
+            return true;
+        }
+
+        return false;
     }
 
     public static PostFragment newInstance(Context context) {

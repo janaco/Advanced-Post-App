@@ -13,7 +13,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, PostFragment.newInstance(this))
+                .replace(R.id.container, PostFragment.newInstance(this), PostFragment.class.getSimpleName())
                 .commit();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        PostFragment postFragment = (PostFragment)
+                getSupportFragmentManager().findFragmentByTag(PostFragment.class.getSimpleName());
+
+        if (postFragment != null && postFragment.onBackPressed()) {
+            return;
+        }
+
+        super.onBackPressed();
     }
 }

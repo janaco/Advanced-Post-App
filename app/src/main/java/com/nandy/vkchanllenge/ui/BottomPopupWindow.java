@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 
@@ -53,6 +54,7 @@ public abstract  class BottomPopupWindow {
         if (popupWindow == null) {
             createPopupWindowView();
         }
+
         if (!isShowed()) {
             new Handler().postDelayed(() -> {
                 popupWindow.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
@@ -71,10 +73,10 @@ public abstract  class BottomPopupWindow {
     public void createPopupWindowView() {
 
         View view = onCreateView(parentView.getContext(), parentView);
+        parentView.setFocusable(true);
         popupWindow = new PopupWindow(view);
         popupWindow.setHeight(View.MeasureSpec.makeMeasureSpec(setPopupHeight(), View.MeasureSpec.EXACTLY));
         popupWindow.setWidth(View.MeasureSpec.makeMeasureSpec(getDisplayDimensions(getContext()).x, View.MeasureSpec.EXACTLY));
-        popupWindow.setAnimationStyle(0);
         onViewCreated(view);
     }
 
