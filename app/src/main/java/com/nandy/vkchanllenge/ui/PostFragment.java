@@ -1,11 +1,11 @@
 package com.nandy.vkchanllenge.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -13,11 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.nandy.vkchanllenge.MyFragment;
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
@@ -41,7 +41,8 @@ import butterknife.OnClick;
  * Created by yana on 07.09.17.
  */
 
-public class PostFragment extends MyFragment implements PostView<PostPresenter>, OnListItemClickListener<Background> {
+public class PostFragment extends MyFragment implements PostView<PostPresenter>,
+        OnListItemClickListener<Background> {
 
     @BindView(R.id.text_view)
     EditText textView;
@@ -74,6 +75,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
         presenter.start();
         pickerView = new BackgroundPickerView(view);
         pickerView.setBackgroundModel(new BackgroundModel(getContext()));
+        pickerView.setOnItemClickListener(presenter);
     }
 
     @Override
@@ -103,7 +105,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     }
 
     @OnClick(R.id.text_view)
-    void onInputClick(){
+    void onInputClick() {
         if (pickerView.isShowed()) {
             pickerView.dismiss();
         }
@@ -117,7 +119,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     @Override
     public void onListItemClick(Background background, int position) {
 
-        if (background == Background.CUSTOM){
+        if (background == Background.CUSTOM) {
             pickerView.showPopup();
             return;
         }
@@ -126,7 +128,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
 
     @Override
-    public void setThumbnails(Background []background) {
+    public void setThumbnails(Background[] background) {
         thumbnailsAdapter = new ThumbnailsAdapter(background);
         thumbnailsAdapter.setOnListItemClickListener(this);
         thumbnailsList.setAdapter(thumbnailsAdapter);
@@ -134,11 +136,22 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @Override
     public void setBackground(Drawable background) {
-        for (ImageView imageView: imageParts){
+        for (ImageView imageView : imageParts) {
             contentView.removeView(imageView);
         }
         imageParts.clear();
         backgroundView.setImageDrawable(background);
+    }
+
+    @Override
+    public void setBackground(String path) {
+        for (ImageView imageView : imageParts) {
+            contentView.removeView(imageView);
+        }
+        imageParts.clear();
+        Glide.with(getContext())
+                .load(path)
+                .into(backgroundView);
     }
 
     @Override
@@ -153,7 +166,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @Override
     public void addSticker(ImageView imageView) {
-        contentView.addView(imageView, contentView.getChildCount()-1);
+        contentView.addView(imageView, contentView.getChildCount() - 1);
     }
 
     @Override
@@ -170,14 +183,19 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     }
 
 
-
     @Override
     public void setPresenter(PostPresenter presenter) {
         this.presenter = presenter;
     }
 
-    public boolean onBackPressed(){
-        if (pickerView.isShowed()){
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        presenter.onActivityResult(requestCode, data);
+    }
+
+    public boolean onBackPressed() {
+        if (pickerView.isShowed()) {
             pickerView.dismiss();
             return true;
         }

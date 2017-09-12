@@ -23,6 +23,8 @@ public class BackgroundPickerView extends BottomPopupWindow {
     @BindView(R.id.images_list)
     RecyclerView imagesList;
 
+    private ImagesAdapter.OnBackgroundChooseListener onItemClickListener;
+
     private Disposable imagesSubscription;
     private BackgroundModel backgroundModel;
 
@@ -33,6 +35,10 @@ public class BackgroundPickerView extends BottomPopupWindow {
 
     public void setBackgroundModel(BackgroundModel backgroundModel) {
         this.backgroundModel = backgroundModel;
+    }
+
+    public void setOnItemClickListener(ImagesAdapter.OnBackgroundChooseListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -47,6 +53,7 @@ public class BackgroundPickerView extends BottomPopupWindow {
 
         imagesSubscription = backgroundModel.loadImages().subscribe(files -> {
             ImagesAdapter adapter = new ImagesAdapter(files);
+            adapter.setOnItemClickListener(onItemClickListener);
             setImagesAdapter(adapter);
         });
     }
@@ -55,5 +62,6 @@ public class BackgroundPickerView extends BottomPopupWindow {
         imagesList.setAdapter(imagesAdapter);
 
     }
+
 
 }

@@ -145,4 +145,30 @@ public class BackgroundModel {
                 .observeOn(AndroidSchedulers.mainThread());
         return single;
     }
+
+    public String getImageFromGallery(Uri uri) {
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        String pathToImage = "";
+        Cursor cursor = context.getContentResolver().query(uri,
+                filePathColumn, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            pathToImage = cursor.getString(columnIndex);
+            cursor.close();
+        }
+        return Uri.parse(pathToImage).getPath();
+    }
+
+
+    public String getOutputFromCamera() {
+
+        return new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg").getPath();
+    }
+
+
+
+
 }

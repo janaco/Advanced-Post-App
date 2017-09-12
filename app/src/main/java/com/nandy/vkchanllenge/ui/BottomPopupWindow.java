@@ -75,6 +75,7 @@ public abstract  class BottomPopupWindow {
         View view = onCreateView(parentView.getContext(), parentView);
         parentView.setFocusable(true);
         popupWindow = new PopupWindow(view);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         popupWindow.setHeight(View.MeasureSpec.makeMeasureSpec(setPopupHeight(), View.MeasureSpec.EXACTLY));
         popupWindow.setWidth(View.MeasureSpec.makeMeasureSpec(getDisplayDimensions(getContext()).x, View.MeasureSpec.EXACTLY));
         onViewCreated(view);

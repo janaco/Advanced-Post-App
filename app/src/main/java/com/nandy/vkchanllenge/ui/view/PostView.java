@@ -1,5 +1,6 @@
 package com.nandy.vkchanllenge.ui.view;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
@@ -22,6 +23,8 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
 
     void setBackground(Drawable background);
 
+    void setBackground(String path);
+
     void highlight(Spannable spannableText);
 
     void showStickersPopup(List<Bitmap> stickers, StickersDialog.OnStickerSelectedListener listener);
@@ -31,5 +34,8 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
     void addSticker(ImageView imageView);
 
     void addBackgroundPart(ImageView imageView);
+
+    void startActivityForResult(Intent intent, int requestCode);
+
 
 }

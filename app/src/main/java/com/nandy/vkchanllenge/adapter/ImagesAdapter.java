@@ -3,6 +3,7 @@ package com.nandy.vkchanllenge.adapter;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +33,14 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
 
     private List<String> files;
     private int checkedPosition = VIEW_IMAGE;
+    private OnBackgroundChooseListener onItemClickListener;
 
     public ImagesAdapter(List<String> files) {
         this.files = files;
+    }
+
+    public void setOnItemClickListener(OnBackgroundChooseListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -47,12 +53,14 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        if (position == 0 || position == 1 ){
+        String path = files.get(position);
+
+        if (position == 0 || position == 1) {
             holder.imageView.setPadding(48, 12, 12, 12);
-        }else if (position == getItemCount() - 1){
+        } else if (position == getItemCount() - 1) {
             holder.imageView.setPadding(12, 12, 48, 12);
 
-        }else {
+        } else {
             holder.imageView.setPadding(12, 12, 12, 12);
         }
 
@@ -66,7 +74,6 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
             boolean checked = position == checkedPosition;
             position -= 2;
 
-            String path = files.get(position);
 
             if (checked) {
 
@@ -76,7 +83,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
                         .override(252, 252)
                         .bitmapTransform(new CenterCrop(holder.imageView.getContext()),
                                 new RoundedCornersTransformation(holder.imageView.getContext(), 12, 6, ContextCompat.getColor(holder.imageView.getContext(), R.color.cornflower_blue_two), 6))
-                                        .into(holder.imageView);
+                        .into(holder.imageView);
             } else {
 
                 Glide
@@ -90,8 +97,24 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
         }
 
         holder.imageView.setOnClickListener(view -> {
-            checkedPosition = holder.getAdapterPosition();
-            notifyDataSetChanged();
+
+            Log.d("IMAGES_", "onItemClick: " + holder.getAdapterPosition());
+            switch (holder.getAdapterPosition()) {
+
+                case VIEW_CAMERA:
+                    onItemClickListener.onTakeFromCameraClick();
+                    break;
+
+                case VIEW_ALBUM:
+                    onItemClickListener.onChooseFromGalleryClick();
+                    break;
+
+                default:
+                    onItemClickListener.onImageSelected(path);
+                    checkedPosition = holder.getAdapterPosition();
+                    notifyDataSetChanged();
+                    break;
+            }
         });
     }
 
@@ -115,5 +138,15 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
             super(view);
             ButterKnife.bind(this, view);
         }
+    }
+
+
+    public interface OnBackgroundChooseListener {
+
+        void onImageSelected(String path);
+
+        void onTakeFromCameraClick();
+
+        void onChooseFromGalleryClick();
     }
 }
