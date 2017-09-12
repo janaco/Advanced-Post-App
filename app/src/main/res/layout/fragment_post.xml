@@ -205,20 +205,6 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:id="@+id/layout_images"
-            android:layout_height="208dp">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/images_list"
-                android:layout_width="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/item_image" />
-
-
-        </RelativeLayout>
 
 
     </LinearLayout>

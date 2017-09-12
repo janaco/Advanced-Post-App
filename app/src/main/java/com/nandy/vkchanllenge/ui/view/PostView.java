@@ -32,5 +32,4 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
 
     void addBackgroundPart(ImageView imageView);
 
-    void setImagesAdapter(ImagesAdapter imagesAdapter);
 }

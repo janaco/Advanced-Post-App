@@ -51,13 +51,14 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     RecyclerView thumbnailsList;
     @BindView(R.id.background_view)
     ImageView backgroundView;
-    @BindView(R.id.images_list)
-    RecyclerView imagesList;
+
 
     private final List<ImageView> imageParts = new ArrayList<>();
 
     private PostPresenter presenter;
     private ThumbnailsAdapter thumbnailsAdapter;
+
+    private BackgroundPickerView pickerView;
 
     @Nullable
     @Override
@@ -70,8 +71,9 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         thumbnailsList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        imagesList.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false));
         presenter.start();
+        pickerView = new BackgroundPickerView(view);
+        pickerView.setBackgroundModel(new BackgroundModel(getContext()));
     }
 
     @Override
@@ -107,6 +109,11 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @Override
     public void onListItemClick(Background background, int position) {
+
+        if (background == Background.CUSTOM){
+            pickerView.showPopup();
+            return;
+        }
         presenter.onThumbnailSelected(background);
     }
 
@@ -155,10 +162,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     }
 
-    @Override
-    public void setImagesAdapter(ImagesAdapter imagesAdapter) {
-        imagesList.setAdapter(imagesAdapter);
-    }
+
 
     @Override
     public void setPresenter(PostPresenter presenter) {

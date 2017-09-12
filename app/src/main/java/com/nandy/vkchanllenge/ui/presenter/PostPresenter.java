@@ -40,7 +40,6 @@ public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSel
 
     private Disposable stickersSubscription;
     private Disposable postSubscription;
-    private Disposable imagesSubscription;
 
     public PostPresenter(PostView<PostPresenter> view) {
         this.view = view;
@@ -66,10 +65,7 @@ public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSel
     public void start() {
         view.setThumbnails(backgroundModel.getThumbnails());
         stickersSubscription = stickersModel.loadStickers().subscribe();
-        imagesSubscription = backgroundModel.loadImages().subscribe(files -> {
-            ImagesAdapter adapter = new ImagesAdapter(files);
-            view.setImagesAdapter(adapter);
-        });
+
     }
 
     @Override
@@ -83,9 +79,9 @@ public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSel
             postSubscription.dispose();
         }
 
-        if (imagesSubscription != null && !imagesSubscription.isDisposed()){
-            imagesSubscription.dispose();
-        }
+//        if (imagesSubscription != null && !imagesSubscription.isDisposed()){
+//            imagesSubscription.dispose();
+//        }
     }
 
     @Override
