@@ -47,6 +47,15 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
+        if (position == 0 || position == 1 ){
+            holder.imageView.setPadding(48, 12, 12, 12);
+        }else if (position == getItemCount() - 1){
+            holder.imageView.setPadding(12, 12, 48, 12);
+
+        }else {
+            holder.imageView.setPadding(12, 12, 12, 12);
+        }
+
         if (position == VIEW_CAMERA) {
 
             holder.imageView.setImageResource(R.drawable.thumb_camera);

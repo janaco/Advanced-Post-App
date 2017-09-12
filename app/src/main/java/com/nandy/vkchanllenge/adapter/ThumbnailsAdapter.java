@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
@@ -62,7 +63,16 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         Background background = backgrounds[position];
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.thumbnailView.getLayoutParams();
+        if (position == 0  ){
+            layoutParams.setMargins(48, 18, 18, 18);
+        }else if (position == getItemCount() - 1){
+            layoutParams.setMargins(18, 18, 48, 18);
 
+        }else {
+            layoutParams.setMargins(18, 18, 18, 18);
+        }
+        holder.thumbnailView.setLayoutParams(layoutParams);
 
         Bitmap bitmap;
 
@@ -82,14 +92,6 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
 
         } else {
             bitmap = BitmapFactory.decodeResource(holder.thumbnailView.getContext().getResources(), background.getThumbnailId());
-
-//            if (position == checkedPosition){
-//                bitmap = transform(bitmap, true, 2, 4, 2, ContextCompat.getColor(holder.thumbnailView.getContext(), R.color.cornflower_blue_two));
-//            }else {
-//                bitmap = transform(bitmap, false, 0, 4, 0, ContextCompat.getColor(holder.thumbnailView.getContext(), R.color.cornflower_blue_two));
-//
-//            }
-
         }
 
 

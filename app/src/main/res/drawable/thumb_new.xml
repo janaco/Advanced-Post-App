@@ -2,13 +2,14 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/cornflower_blue_two_a24"/>
+            <solid android:color="@color/cornflower_blue_two_a24" />
         </shape>
     </item>
     <item
+        android:width="32dp"
+        android:height="32dp"
         android:drawable="@mipmap/ic_toolbar_new"
-        android:width="14dp"
-        android:height="14dp">
+       >
 
     </item>
 </layer-list>
