@@ -99,7 +99,7 @@
         android:layout_below="@+id/toolbar"
         android:gravity="center">
 
-        <RelativeLayout
+        <FrameLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="360dp">
@@ -109,10 +109,12 @@
                 android:id="@+id/background_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:src="@drawable/gradient_blue" />
 
             <EditText
+                android:layout_gravity="center"
                 android:id="@+id/text_view"
                 style="@style/TextStyle5"
                 android:layout_width="wrap_content"
@@ -135,7 +137,7 @@
                 android:textColorHint="@color/black_a24" />
 
 
-        </RelativeLayout>
+        </FrameLayout>
 
     </LinearLayout>
 
