@@ -205,17 +205,14 @@ public class StickersModel {
                             float scale = (newDist / oldDist);
                             matrix.postScale(scale, scale, mid.x, mid.y);
                         }
-                        if (lastEvent != null && event.getPointerCount() == 3) {
+                        if (lastEvent != null && event.getPointerCount() == 2) {
                             newRot = rotation(event);
                             float r = newRot - d;
                             float[] values = new float[9];
                             matrix.getValues(values);
-                            float tx = values[2];
-                            float ty = values[5];
-                            float sx = values[0];
-                            float xc = (view.getWidth() / 2) * sx;
-                            float yc = (view.getHeight() / 2) * sx;
-                            matrix.postRotate(r, tx + xc, ty + yc);
+                            float xc = (view.getWidth() / 2) ;
+                            float yc = (view.getHeight() / 2);
+                            matrix.postRotate(r, xc, yc);
                         }
                     }
                     break;
