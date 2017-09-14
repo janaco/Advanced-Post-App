@@ -177,12 +177,12 @@ view.setBackground(path);
     }
 
     @Override
-    public void onStickerTouched() {
-view.onStickerTouched();
+    public void showTrash(View viewTrash) {
+        view.showTrash(viewTrash);
     }
 
     @Override
-    public void onStickerReleased() {
-view.afterStickerReleased();
+    public void remove(View view) {
+        this.view.remove(view);
     }
 }

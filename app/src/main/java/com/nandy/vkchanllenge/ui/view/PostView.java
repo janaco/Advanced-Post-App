@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.nandy.vkchanllenge.BaseView;
@@ -37,9 +38,8 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
 
     void startActivityForResult(Intent intent, int requestCode);
 
-    void onStickerTouched();
+    void showTrash(View viewTrash);
 
-    void afterStickerReleased();
-
+    void remove(View view);
 
 }

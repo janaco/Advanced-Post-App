@@ -59,8 +59,6 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     RecyclerView thumbnailsList;
     @BindView(R.id.background_view)
     ImageView backgroundView;
-    @BindView(R.id.trash)
-    ImageView viewTrash;
 
 
     private final List<ImageView> imageParts = new ArrayList<>();
@@ -212,23 +210,15 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
         return false;
     }
 
-    Disposable trashSubs;
+
     @Override
-    public void onStickerTouched() {
-        trashSubs = Observable.just(true).delay(500, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(aBoolean -> {
-                    viewTrash.setVisibility(View.VISIBLE);
-                    return true;
-                })
-                .subscribe();
+    public void showTrash(View viewTrash) {
+        contentView.addView(viewTrash, contentView.getChildCount() - 2);
     }
 
     @Override
-    public void afterStickerReleased() {
-       viewTrash.setVisibility(View.GONE);
-       trashSubs.dispose();
+    public void remove(View viewTrash) {
+        contentView.removeView(viewTrash);
     }
 
     public static PostFragment newInstance(Context context) {

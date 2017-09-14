@@ -53,7 +53,12 @@ public class StickersDialog extends Dialog {
 
         StickersAdapter adapter = new StickersAdapter(stickers);
         gridView.setAdapter(adapter);
-        gridView.setOnItemClickListener((adapterView, view1, position, l) -> onStickerSelectedListener.onStickerSelected(adapter.getItem(position)));
+        gridView.setOnItemClickListener((adapterView, view1, position, l) -> {
+            onStickerSelectedListener.onStickerSelected(adapter.getItem(position));
+            dismiss();
+
+        });
+
     }
 
 
@@ -78,6 +83,7 @@ public class StickersDialog extends Dialog {
         }
         dialog.show();
     }
+
 
     public interface OnStickerSelectedListener {
         void onStickerSelected(Bitmap bitmap);

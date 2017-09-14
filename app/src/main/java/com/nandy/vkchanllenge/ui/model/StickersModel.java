@@ -6,19 +6,27 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import com.nandy.vkchanllenge.R;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -27,13 +35,33 @@ import io.reactivex.schedulers.Schedulers;
 
 public class StickersModel {
 
+    private static final int TRASH_SIZE = 48;
+    private static final int TRASH_RELEASED_SIZE = 56;
+
     private Context context;
     private final List<Bitmap> stickers = new ArrayList<>();
     private StickerTouchListener stickerTouchListener;
+    private ImageView viewTrash;
 
+    private float scaledDensity;
+    private int trashPadding = 30;
 
     public StickersModel(Context context) {
         this.context = context;
+
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        scaledDensity = displayMetrics.scaledDensity;
+        trashPadding *= scaledDensity;
+
+        viewTrash = new ImageView(context);
+        viewTrash.setImageResource(R.drawable.ic_trash);
+        int size = (int) scaledDensity * 48;
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(size, size);
+        params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+        params.bottomMargin = (int) scaledDensity * 10;
+        viewTrash.setLayoutParams(params);
     }
 
 
@@ -80,40 +108,7 @@ public class StickersModel {
     }
 
 
-//    @Override
-//    public boolean onTouch(View view, MotionEvent event) {
-//        final int x = (int) event.getRawX();
-//        final int y = (int) event.getRawY();
-//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-//            case MotionEvent.ACTION_DOWN:
-//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
-//                xDelta = x - params.leftMargin;
-//                yDelta = y - params.topMargin;
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                break;
-//            case MotionEvent.ACTION_POINTER_DOWN:
-//                break;
-//            case MotionEvent.ACTION_POINTER_UP:
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-//                layoutParams.leftMargin = x - xDelta;
-//                layoutParams.topMargin = y - yDelta;
-//                layoutParams.rightMargin = -250;
-//                layoutParams.bottomMargin = -250;
-//                view.setLayoutParams(layoutParams);
-//                break;
-//        }
-//        return true;
-//    }
-//
-
-
-    private static class OnStickerTouchListener implements View.OnTouchListener {
-
-        private int xDelta;
-        private int yDelta;
+    private class OnStickerTouchListener implements View.OnTouchListener {
 
 
         // these matrices will be used to move and zoom image
@@ -132,34 +127,50 @@ public class StickersModel {
         private float newRot = 0f;
         private float[] lastEvent = null;
 
+
         private StickerTouchListener stickerTouchListener;
 
-        public OnStickerTouchListener(StickerTouchListener stickerTouchListener){
+        public OnStickerTouchListener(StickerTouchListener stickerTouchListener) {
             this.stickerTouchListener = stickerTouchListener;
         }
 
+        int trashXLeft = (int) viewTrash.getX();
+        int trashXRight = trashXLeft + viewTrash.getWidth();
+        int trashYTop = (int) viewTrash.getY();
+        int trashYBottom = trashYTop + viewTrash.getHeight();
+        private boolean remove;
+
+
+        private Disposable trashSubscription;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             // handle touch events here
             ImageView view = (ImageView) v;
-            final int x = (int) event.getRawX();
-            final int y = (int) event.getRawY();
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+
 
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
-                    Log.d("STICKER_TOUCH", "DOWN");
                     savedMatrix.set(matrix);
                     start.set(event.getX(), event.getY());
                     mode = DRAG;
                     lastEvent = null;
-                    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-                    xDelta = x - params.leftMargin;
-                    yDelta = y - params.topMargin;
-                    stickerTouchListener.onStickerTouched();
+                    trashSubscription = Observable.just(true).delay(500, TimeUnit.MILLISECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .map(aBoolean -> {
+                                stickerTouchListener.showTrash(viewTrash);
+                                return true;
+                            })
+                            .subscribe();
+                    trashXLeft = (int) viewTrash.getX();
+                    trashXRight = trashXLeft + viewTrash.getWidth();
+                    trashYTop = (int) viewTrash.getY();
+                    trashYBottom = trashYTop + viewTrash.getHeight();
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
-                    Log.d("STICKER_TOUCH", "ACTION_POINTER_DOWN");
                     oldDist = (float) spacing(event);
                     if (oldDist > 10f) {
                         savedMatrix.set(matrix);
@@ -177,7 +188,12 @@ public class StickersModel {
                 case MotionEvent.ACTION_POINTER_UP:
                     mode = NONE;
                     lastEvent = null;
-                    stickerTouchListener.onStickerReleased();
+                    viewTrash.setImageResource(R.drawable.ic_trash);
+                    stickerTouchListener.remove(viewTrash);
+                    if (remove) {
+                        stickerTouchListener.remove(view);
+                    }
+                    trashSubscription.dispose();
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (mode == DRAG) {
@@ -197,11 +213,33 @@ public class StickersModel {
                             float r = newRot - d;
                             float[] values = new float[9];
                             matrix.getValues(values);
-                            float xc = (view.getWidth() / 2) ;
+                            float xc = (view.getWidth() / 2);
                             float yc = (view.getHeight() / 2);
                             matrix.postRotate(r, xc, yc);
                         }
                     }
+
+
+                    if (x + trashPadding > trashXLeft && x - trashPadding < trashXRight
+                            && y + trashPadding > trashYTop && y - trashPadding < trashYBottom) {
+                        viewTrash.setImageResource(R.drawable.ic_trash_released);
+                        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewTrash.getLayoutParams();
+                        params.width = (int) (TRASH_RELEASED_SIZE * scaledDensity);
+                        params.height = (int) (TRASH_RELEASED_SIZE * scaledDensity);
+                        viewTrash.setLayoutParams(params);
+                        view.setAlpha(0.48f);
+                        remove = true;
+
+                    } else {
+                        viewTrash.setImageResource(R.drawable.ic_trash);
+                        view.setAlpha(1f);
+                        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewTrash.getLayoutParams();
+                        params.width = (int) (TRASH_SIZE * scaledDensity);
+                        params.height = (int) (TRASH_SIZE * scaledDensity);
+                        viewTrash.setLayoutParams(params);
+                        remove = false;
+                    }
+
                     break;
             }
 
@@ -241,10 +279,10 @@ public class StickersModel {
         }
     }
 
-    public interface StickerTouchListener{
+    public interface StickerTouchListener {
 
-        void onStickerTouched();
+        void showTrash(View viewTrash);
 
-        void onStickerReleased();
+        void remove(View view);
     }
 }
