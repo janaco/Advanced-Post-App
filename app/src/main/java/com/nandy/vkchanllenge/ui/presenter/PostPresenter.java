@@ -37,7 +37,8 @@ import io.reactivex.functions.Consumer;
  * Created by yana on 07.09.17.
  */
 
-public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSelectedListener, ImagesAdapter.OnBackgroundChooseListener {
+public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSelectedListener,
+        ImagesAdapter.OnBackgroundChooseListener , StickersModel.StickerTouchListener{
 
     private static final int REQUEST_CODE_GALLERY = 108;
     private static final int REQUEST_CODE_CAMERA = 109;
@@ -175,4 +176,13 @@ view.setBackground(path);
         postSubscription = postModel.post(view).subscribe(success -> PostPresenter.this.view.onPostResult(success));
     }
 
+    @Override
+    public void onStickerTouched() {
+view.onStickerTouched();
+    }
+
+    @Override
+    public void onStickerReleased() {
+view.afterStickerReleased();
+    }
 }

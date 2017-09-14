@@ -6,12 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.util.FloatMath;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,10 +29,16 @@ public class StickersModel {
 
     private Context context;
     private final List<Bitmap> stickers = new ArrayList<>();
+    private StickerTouchListener stickerTouchListener;
 
 
     public StickersModel(Context context) {
         this.context = context;
+    }
+
+
+    public void setStickerTouchListener(StickerTouchListener stickerTouchListener) {
+        this.stickerTouchListener = stickerTouchListener;
     }
 
     public Single<List<Bitmap>> loadStickers() {
@@ -68,7 +73,7 @@ public class StickersModel {
         imageView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
         imageView.setScaleType(ImageView.ScaleType.MATRIX);
-        imageView.setOnTouchListener(new OnStickerTouchListener());
+        imageView.setOnTouchListener(new OnStickerTouchListener(stickerTouchListener));
 
 
         return imageView;
@@ -127,28 +132,12 @@ public class StickersModel {
         private float newRot = 0f;
         private float[] lastEvent = null;
 
+        private StickerTouchListener stickerTouchListener;
 
-//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-//            case MotionEvent.ACTION_DOWN:
-//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
-//                xDelta = x - params.leftMargin;
-//                yDelta = y - params.topMargin;
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                break;
-//            case MotionEvent.ACTION_POINTER_DOWN:
-//                break;
-//            case MotionEvent.ACTION_POINTER_UP:
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-//                layoutParams.leftMargin = x - xDelta;
-//                layoutParams.topMargin = y - yDelta;
-//                layoutParams.rightMargin = -250;
-//                layoutParams.bottomMargin = -250;
-//                view.setLayoutParams(layoutParams);
-//                break;
-//        }
+        public OnStickerTouchListener(StickerTouchListener stickerTouchListener){
+            this.stickerTouchListener = stickerTouchListener;
+        }
+
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -159,6 +148,7 @@ public class StickersModel {
 
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
+                    Log.d("STICKER_TOUCH", "DOWN");
                     savedMatrix.set(matrix);
                     start.set(event.getX(), event.getY());
                     mode = DRAG;
@@ -166,8 +156,10 @@ public class StickersModel {
                     FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
                     xDelta = x - params.leftMargin;
                     yDelta = y - params.topMargin;
+                    stickerTouchListener.onStickerTouched();
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
+                    Log.d("STICKER_TOUCH", "ACTION_POINTER_DOWN");
                     oldDist = (float) spacing(event);
                     if (oldDist > 10f) {
                         savedMatrix.set(matrix);
@@ -185,6 +177,7 @@ public class StickersModel {
                 case MotionEvent.ACTION_POINTER_UP:
                     mode = NONE;
                     lastEvent = null;
+                    stickerTouchListener.onStickerReleased();
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (mode == DRAG) {
@@ -192,12 +185,6 @@ public class StickersModel {
                         float dx = event.getX() - start.x;
                         float dy = event.getY() - start.y;
                         matrix.postTranslate(dx, dy);
-//                        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
-//                        layoutParams.leftMargin = x - xDelta;
-//                        layoutParams.topMargin = y - yDelta;
-//                        layoutParams.rightMargin = -250;
-//                        layoutParams.bottomMargin = -250;
-//                        view.setLayoutParams(layoutParams);
                     } else if (mode == ZOOM) {
                         float newDist = (float) spacing(event);
                         if (newDist > 10f) {
@@ -252,5 +239,12 @@ public class StickersModel {
             double radians = Math.atan2(delta_y, delta_x);
             return (float) Math.toDegrees(radians);
         }
+    }
+
+    public interface StickerTouchListener{
+
+        void onStickerTouched();
+
+        void onStickerReleased();
     }
 }

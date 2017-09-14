@@ -37,5 +37,9 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
 
     void startActivityForResult(Intent intent, int requestCode);
 
+    void onStickerTouched();
+
+    void afterStickerReleased();
+
 
 }

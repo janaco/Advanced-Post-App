@@ -137,6 +137,16 @@
                 android:textColorHint="@color/black_a24" />
 
 
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/trash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_trash" />
+
         </FrameLayout>
 
     </LinearLayout>

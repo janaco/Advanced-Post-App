@@ -33,10 +33,16 @@ import com.nandy.vkchanllenge.ui.view.PostView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by yana on 07.09.17.
@@ -53,6 +59,8 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     RecyclerView thumbnailsList;
     @BindView(R.id.background_view)
     ImageView backgroundView;
+    @BindView(R.id.trash)
+    ImageView viewTrash;
 
 
     private final List<ImageView> imageParts = new ArrayList<>();
@@ -167,7 +175,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @Override
     public void addSticker(ImageView imageView) {
-        contentView.addView(imageView, contentView.getChildCount() - 1);
+        contentView.addView(imageView, contentView.getChildCount() - 2);
     }
 
     @Override
@@ -204,6 +212,25 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
         return false;
     }
 
+    Disposable trashSubs;
+    @Override
+    public void onStickerTouched() {
+        trashSubs = Observable.just(true).delay(500, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(aBoolean -> {
+                    viewTrash.setVisibility(View.VISIBLE);
+                    return true;
+                })
+                .subscribe();
+    }
+
+    @Override
+    public void afterStickerReleased() {
+       viewTrash.setVisibility(View.GONE);
+       trashSubs.dispose();
+    }
+
     public static PostFragment newInstance(Context context) {
 
         PostFragment fragment = new PostFragment();
@@ -211,7 +238,9 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
         PostPresenter presenter = new PostPresenter(fragment);
         presenter.setBackgroundModel(new BackgroundModel(context));
         presenter.setTextModel(new TextModel(context));
-        presenter.setStickersModel(new StickersModel(context));
+        StickersModel stickersModel = new StickersModel(context);
+        stickersModel.setStickerTouchListener(presenter);
+        presenter.setStickersModel(stickersModel);
         presenter.setPostModel(new PostModel());
 
         fragment.setPresenter(presenter);
