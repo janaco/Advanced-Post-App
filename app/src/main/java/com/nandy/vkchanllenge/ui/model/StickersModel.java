@@ -7,13 +7,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.nandy.vkchanllenge.R;
 
@@ -58,8 +57,9 @@ public class StickersModel {
         viewTrash = new ImageView(context);
         viewTrash.setImageResource(R.drawable.ic_trash);
         int size = (int) scaledDensity * 48;
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(size, size);
-        params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(size, size);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         params.bottomMargin = (int) scaledDensity * 10;
         viewTrash.setLayoutParams(params);
     }
@@ -98,8 +98,8 @@ public class StickersModel {
     public ImageView createStickerView(Bitmap bitmap) {
         ImageView imageView = new ImageView(context);
         imageView.setImageBitmap(bitmap);
-        imageView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT));
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT));
         imageView.setScaleType(ImageView.ScaleType.MATRIX);
         imageView.setOnTouchListener(new OnStickerTouchListener(stickerTouchListener));
 
@@ -223,7 +223,7 @@ public class StickersModel {
                     if (x + trashPadding > trashXLeft && x - trashPadding < trashXRight
                             && y + trashPadding > trashYTop && y - trashPadding < trashYBottom) {
                         viewTrash.setImageResource(R.drawable.ic_trash_released);
-                        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewTrash.getLayoutParams();
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewTrash.getLayoutParams();
                         params.width = (int) (TRASH_RELEASED_SIZE * scaledDensity);
                         params.height = (int) (TRASH_RELEASED_SIZE * scaledDensity);
                         viewTrash.setLayoutParams(params);
@@ -233,7 +233,7 @@ public class StickersModel {
                     } else {
                         viewTrash.setImageResource(R.drawable.ic_trash);
                         view.setAlpha(1f);
-                        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewTrash.getLayoutParams();
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewTrash.getLayoutParams();
                         params.width = (int) (TRASH_SIZE * scaledDensity);
                         params.height = (int) (TRASH_SIZE * scaledDensity);
                         viewTrash.setLayoutParams(params);

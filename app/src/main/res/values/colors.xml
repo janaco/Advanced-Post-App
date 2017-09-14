@@ -8,6 +8,7 @@
     <color name="grey">#909499</color>
     <color name="grey_light">#ebebeb</color>
     <color name="white">#ffffff</color>
+    <color name="white_a92">#92ffffff</color>
     <color name="cool_blue">#4680c2</color>
     <color name="sun_yellow">#ffcc33</color>
     <color name="orangish">#ff7733</color>
@@ -23,6 +24,7 @@
     <color name="sickly_yellow">#cbe645</color>
     <color name="cornflower_blue_two_a48">#48528bcc</color>
     <color name="cornflower_blue_two_a24">#24528bcc</color>
+    <color name="cornflower_blue_two_a72">#72528bcc</color>
     <color name="black_a24">#242c2d2e</color>
     <color name="highlight">#5cffffff</color>
     <color name="transparent">#00ffffff</color>

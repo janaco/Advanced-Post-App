@@ -2,104 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:gravity="center_vertical">
-
-        <RelativeLayout
-            android:id="@+id/btn_font"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_toolbar_font" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_toEndOf="@+id/btn_font"
-            android:layout_toLeftOf="@+id/btn_sticker"
-            android:layout_toRightOf="@+id/btn_font"
-            android:layout_toStartOf="@+id/btn_sticker"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/btn_post"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:letterSpacing="0.04"
-                android:paddingEnd="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingStart="10dp"
-                android:text="@string/post"
-                android:textAllCaps="true"
-                android:textColor="@color/cornflower_blue_two"
-                android:textSize="14sp"
-                android:textStyle="normal" />
-
-            <TextView
-                android:id="@+id/btn_story"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:letterSpacing="0.04"
-                android:paddingEnd="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingStart="10dp"
-                android:text="@string/story"
-                android:textAllCaps="true"
-                android:textColor="@color/cornflower_blue_two"
-                android:textSize="14sp"
-                android:textStyle="normal" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/btn_sticker"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_toolbar_sticker" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_alignParentBottom="true"
-            android:alpha="0.12"
-            android:background="@color/black" />
-    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="360dp"
-        android:layout_above="@+id/bottom_bar"
-        android:layout_below="@+id/toolbar"
+        android:layout_height="match_parent"
+        android:id="@+id/content_root_view"
         android:gravity="center">
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="360dp">
@@ -147,9 +62,86 @@
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/ic_trash" />
 
-        </FrameLayout>
+        </RelativeLayout>
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:alpha="0.92"
+            android:background="@color/white"
+            android:layout_height="match_parent"/>
+        <RelativeLayout
+            android:id="@+id/btn_font"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_toolbar_font" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_toEndOf="@+id/btn_font"
+            android:layout_toLeftOf="@+id/btn_sticker"
+            android:layout_toRightOf="@+id/btn_font"
+            android:layout_toStartOf="@+id/btn_sticker"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="wrap_content"
+                app:tabGravity="center"
+                app:tabBackground="@null"
+                app:tabPaddingStart="12dp"
+                android:scaleY="-1"
+                app:tabPaddingEnd="12dp"
+                app:tabPaddingTop="16dp"
+                app:tabPaddingBottom="16dp"
+                android:alpha="1"
+                app:tabTextColor="@color/cornflower_blue_two_a72"
+                app:tabSelectedTextColor="@color/cornflower_blue_two"
+                app:tabIndicatorColor="@color/cornflower_blue_two"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                app:tabIndicatorHeight="2dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/btn_sticker"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_toolbar_sticker" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            android:alpha="0.12"
+            android:background="@color/black" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/bottom_bar"
@@ -169,6 +161,12 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:orientation="horizontal">
+
+            <View
+                android:layout_width="match_parent"
+                android:alpha="0.92"
+                android:background="@color/white"
+                android:layout_height="match_parent"/>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -214,6 +212,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_centerVertical="true"
                     android:paddingRight="16dp"
+                    android:alpha="1"
                     android:paddingStart="16dp"
                     android:text="@string/send"
                     android:textColor="@color/white"
