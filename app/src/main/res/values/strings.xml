@@ -8,6 +8,10 @@
     <string name="stickers">Стикеры</string>
     <string name="login">Войти через ВКонтакте</string>
     <string name="no_internet_connection">Нет подключения к Интернету</string>
-
+    <string name="cancel">Отмена</string>
+    <string name="publishing">Публикация…</string>
+    <string name="create_more">Создать ещё</string>
+    <string name="published">Опубликовано!</string>
+    <string name="failed_to_publish">Не удалось опубликовать.</string>
 
 </resources>

@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private void showCreatePostScreen() {
+    public void showCreatePostScreen() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, PostFragment.newInstance(this), PostFragment.class.getSimpleName())
                 .commit();
