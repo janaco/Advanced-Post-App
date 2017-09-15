@@ -1,6 +1,7 @@
 package com.nandy.vkchanllenge.api;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -19,6 +20,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -27,50 +29,68 @@ import io.reactivex.schedulers.Schedulers;
 
 public class VkApi {
 
-    private static final int TARGET_GROUP = 60479154;
+    private static final int TARGET_GROUP = -1;
 
-    public static Single<Void> uploadImageToWall(Bitmap image) {
+    private Callback callback;
 
-        return Single.create((SingleOnSubscribe<Void>) e -> loadImage(image, e)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-
+    public VkApi(Callback callback) {
+        this.callback = callback;
     }
 
-    private static void loadImage(Bitmap image, SingleEmitter<Void> e) {
-        VKRequest request = VKApi.uploadWallPhotoRequest
-                (new VKUploadImage(image, VKImageParameters.pngImage()), 0, TARGET_GROUP);
+    private VKRequest request;
 
-        request.executeSyncWithListener(new VKRequest.VKRequestListener() {
+    public void uploadImageToWall(Bitmap image) {
+        request = VKApi.uploadWallPhotoRequest
+                (new VKUploadImage(image, VKImageParameters.pngImage()), 0, 0);
+        Log.d("POST_", "uploadWallPhotoRequest: " + image);
+
+        request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
+                Log.d("POST_", "onComplete: " + response.json);
                 image.recycle();
                 VKApiPhoto photoModel = ((VKPhotoArray) response.parsedModel).get(0);
-                makePost(new VKAttachments(photoModel), e);
+                makePost(new VKAttachments(photoModel));
             }
 
             @Override
             public void onError(VKError error) {
+                Log.d("POST_", "onError: " + error);
                 if (error.httpError != null) {
-                    e.onError(new Throwable(error.errorMessage));
+                    callback.onResult(false);
                 }
             }
         });
+
     }
 
-    private static void makePost(VKAttachments attachments, SingleEmitter<Void> e) {
-        VKRequest post = VKApi.wall().post(VKParameters.from(VKApiConst.OWNER_ID, "-" + TARGET_GROUP, VKApiConst.ATTACHMENTS, attachments, VKApiConst.MESSAGE, null));
-        post.setModelClass(VKWallPostResult.class);
-        post.executeSyncWithListener(new VKRequest.VKRequestListener() {
+    private void makePost(VKAttachments attachments) {
+        request = VKApi.wall().post(VKParameters.from(VKApiConst.ATTACHMENTS, attachments, VKApiConst.MESSAGE, null));
+        request.setModelClass(VKWallPostResult.class);
+        request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                e.onSuccess(null);
+                Log.d("POST_", "success: " + response.json);
+               callback.onResult(true);
             }
 
             @Override
             public void onError(VKError error) {
-                e.onError(new Throwable(error.errorMessage));
+                callback.onResult(false);
             }
         });
     }
+
+    public void cancelRequest() {
+//        Log.d("POST_", "cancel: " + request);
+        if (request != null) {
+//            request.cancel();
+        }
+    }
+
+    public interface Callback {
+
+        void onResult(boolean success);
+    }
+
 }

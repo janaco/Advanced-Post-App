@@ -53,7 +53,6 @@
                 android:paddingTop="15dp"
                 android:shadowColor="#1e000000"
                 android:shadowDy="0.5"
-                android:enabled="false"
                 android:textColorHint="@color/black_a24" />
 
 

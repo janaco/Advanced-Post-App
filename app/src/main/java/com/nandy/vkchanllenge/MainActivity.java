@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.nandy.vkchanllenge.ui.fragment.LoginFragment;
 import com.nandy.vkchanllenge.ui.fragment.PostFragment;
+import com.nandy.vkchanllenge.ui.fragment.SendingFragment;
+import com.nandy.vkchanllenge.ui.model.PostModel;
+import com.nandy.vkchanllenge.ui.presenter.PublishPresenter;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
@@ -15,7 +19,6 @@ import com.vk.sdk.util.VKUtil;
 
 public class MainActivity extends AppCompatActivity {
 
-    private boolean isResumed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         VKSdk.wakeUpSession(this, new VKCallback<VKSdk.LoginState>() {
             @Override
             public void onResult(VKSdk.LoginState res) {
-                if (isResumed) {
                     switch (res) {
                         case LoggedOut:
                             showLoginScreen();
@@ -38,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
                         case Unknown:
                             break;
                     }
-                }
             }
 
             @Override
@@ -84,18 +85,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        isResumed = true;
-        if (VKSdk.isLoggedIn()) {
-            showCreatePostScreen();
-        } else {
+        if (!VKSdk.isLoggedIn()) {
             showLoginScreen();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        isResumed = false;
-        super.onPause();
     }
 
     public void showCreatePostScreen() {
@@ -108,6 +100,21 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, new LoginFragment(), LoginFragment.class.getSimpleName())
                 .commit();
+    }
+
+    public void showPostingFragment(View viewFon){
+        SendingFragment fragment = new SendingFragment();
+
+        PublishPresenter publishPresenter = new PublishPresenter(fragment);
+        publishPresenter.setPostModel(new PostModel(viewFon));
+        fragment.setPresenter(publishPresenter);
+
+
+        int commit = getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, fragment, SendingFragment.class.getSimpleName())
+                .commitAllowingStateLoss();
+        Log.d("POST_", "send: " + commit);
+
     }
 
     private boolean onVkLoginActivityResult(int requestCode, int resultCode, Intent data) {

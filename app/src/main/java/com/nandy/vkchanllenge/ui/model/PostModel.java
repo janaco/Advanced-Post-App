@@ -3,15 +3,20 @@ package com.nandy.vkchanllenge.ui.model;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
+
+import com.nandy.vkchanllenge.api.VkApi;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -20,22 +25,24 @@ import io.reactivex.schedulers.Schedulers;
 
 public class PostModel {
 
-    public Single<Boolean> post(View view) {
+    private View view;
+    private VkApi api;
 
-        Single<Boolean> single = Single.create(e -> {
-            Bitmap bitmap = convertToBitmap(view);
-            try {
-                File file = saveAsImage(bitmap);
-                e.onSuccess(true);
-            } catch (FileNotFoundException error) {
-                error.printStackTrace();
-                e.onSuccess(false);
-            }
-        });
-        single.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    public PostModel(View view) {
+        this.view = view;
+    }
 
-        return single;
+    public void initApi(VkApi.Callback callback) {
+        this.api = new VkApi(callback);
+    }
+
+    public void post() {
+
+        api.uploadImageToWall(convertToBitmap(view));
+    }
+
+    public void cancel(){
+        api.cancelRequest();
     }
 
     private Bitmap convertToBitmap(View view) {
@@ -43,6 +50,7 @@ public class PostModel {
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);
 
+        Log.d("POST_", "bitmap: " + bitmap);
         return bitmap;
     }
 
@@ -53,7 +61,7 @@ public class PostModel {
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(file);
-           bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
 
         } finally {
             try {

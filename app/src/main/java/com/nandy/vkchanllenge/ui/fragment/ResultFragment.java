@@ -22,10 +22,20 @@ import butterknife.OnClick;
 
 public class ResultFragment extends Fragment {
 
+    private static final String KEY_SUCCESS = "success";
     @BindView(R.id.image)
     ImageView statusIcon;
     @BindView(R.id.message)
     TextView statusMessage;
+
+    private boolean success;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        success = getArguments().getBoolean(KEY_SUCCESS);
+    }
 
     @Nullable
     @Override
@@ -37,10 +47,23 @@ public class ResultFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        statusMessage.setText(success ? R.string.published : R.string.failed_to_publish);
     }
 
     @OnClick(R.id.create)
     void onCreateNewButtonClick(){
         ((MainActivity) getActivity()).showCreatePostScreen();
+    }
+
+    public static ResultFragment newInstance(boolean success){
+
+        Bundle args = new Bundle();
+        args.putBoolean(KEY_SUCCESS, success);
+
+        ResultFragment fragment = new ResultFragment();
+        fragment.setArguments(args);
+
+        return fragment;
     }
 }

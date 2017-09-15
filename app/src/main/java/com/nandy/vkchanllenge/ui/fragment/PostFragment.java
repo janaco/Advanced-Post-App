@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.nandy.vkchanllenge.MainActivity;
 import com.nandy.vkchanllenge.MyFragment;
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
@@ -38,7 +39,8 @@ import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 import com.nandy.vkchanllenge.ui.model.PostModel;
 import com.nandy.vkchanllenge.ui.model.StickersModel;
 import com.nandy.vkchanllenge.ui.model.TextModel;
-import com.nandy.vkchanllenge.ui.presenter.PostPresenter;
+import com.nandy.vkchanllenge.ui.presenter.CreatePostPresenter;
+import com.nandy.vkchanllenge.ui.presenter.PublishPresenter;
 import com.nandy.vkchanllenge.ui.view.PostView;
 
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ import butterknife.OnClick;
  * Created by yana on 07.09.17.
  */
 
-public class PostFragment extends MyFragment implements PostView<PostPresenter>,
+public class PostFragment extends MyFragment implements PostView<CreatePostPresenter>,
         OnListItemClickListener<Background> {
 
     @BindView(R.id.text_view)
@@ -73,7 +75,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     private final List<ImageView> imageParts = new ArrayList<>();
 
-    private PostPresenter presenter;
+    private CreatePostPresenter presenter;
     private ThumbnailsAdapter thumbnailsAdapter;
 
     private BackgroundPickerView pickerView;
@@ -168,7 +170,20 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @OnClick(R.id.btn_send)
     void onSendButtonClick() {
-        presenter.post(viewFon);
+
+        textView.setCursorVisible(false);
+
+        SendingFragment fragment = new SendingFragment();
+
+        PublishPresenter publishPresenter = new PublishPresenter(fragment);
+        publishPresenter.setPostModel(new PostModel(viewFon));
+        fragment.setPresenter(publishPresenter);
+
+
+        int commit = (getActivity()).getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, fragment, SendingFragment.class.getSimpleName())
+                .commit();
+        Log.d("POST_", "send: " + commit);
     }
 
     @Override
@@ -239,7 +254,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
 
     @Override
-    public void setPresenter(PostPresenter presenter) {
+    public void setPresenter(CreatePostPresenter presenter) {
         this.presenter = presenter;
     }
 
@@ -361,13 +376,12 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
         PostFragment fragment = new PostFragment();
 
-        PostPresenter presenter = new PostPresenter(fragment);
+        CreatePostPresenter presenter = new CreatePostPresenter(fragment);
         presenter.setBackgroundModel(new BackgroundModel(context));
         presenter.setTextModel(new TextModel(context));
         StickersModel stickersModel = new StickersModel(context);
         stickersModel.setStickerTouchListener(presenter);
         presenter.setStickersModel(stickersModel);
-        presenter.setPostModel(new PostModel());
 
         fragment.setPresenter(presenter);
 

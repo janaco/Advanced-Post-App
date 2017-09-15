@@ -29,24 +29,22 @@ import io.reactivex.disposables.Disposable;
  * Created by yana on 07.09.17.
  */
 
-public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSelectedListener,
+public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStickerSelectedListener,
         ImagesAdapter.OnBackgroundChooseListener , StickersModel.StickerTouchListener{
 
     private static final int REQUEST_CODE_GALLERY = 108;
     private static final int REQUEST_CODE_CAMERA = 109;
 
-    private PostView<PostPresenter> view;
+    private PostView<CreatePostPresenter> view;
 
     private BackgroundModel backgroundModel;
     private TextModel textModel;
     private StickersModel stickersModel;
-    private PostModel postModel;
 
 
     private Disposable stickersSubscription;
-    private Disposable postSubscription;
 
-    public PostPresenter(PostView<PostPresenter> view) {
+    public CreatePostPresenter(PostView<CreatePostPresenter> view) {
         this.view = view;
     }
 
@@ -60,10 +58,6 @@ public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSel
 
     public void setTextModel(TextModel textModel) {
         this.textModel = textModel;
-    }
-
-    public void setPostModel(PostModel postModel) {
-        this.postModel = postModel;
     }
 
     @Override
@@ -80,9 +74,7 @@ public class PostPresenter implements BasePresenter, StickersDialog.OnStickerSel
             stickersSubscription.dispose();
         }
 
-        if (postSubscription != null && !postSubscription.isDisposed()) {
-            postSubscription.dispose();
-        }
+
 
 //        if (imagesSubscription != null && !imagesSubscription.isDisposed()){
 //            imagesSubscription.dispose();
@@ -162,10 +154,6 @@ view.setBackground(path);
 
     public void loadStickers() {
         view.showStickersPopup(stickersModel.getStickers(), this);
-    }
-
-    public void post(View view) {
-        postSubscription = postModel.post(view).subscribe(success -> PostPresenter.this.view.onPostResult(success));
     }
 
     @Override

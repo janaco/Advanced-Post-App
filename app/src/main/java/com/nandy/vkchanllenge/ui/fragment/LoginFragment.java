@@ -23,6 +23,14 @@ import butterknife.OnClick;
 
 public class LoginFragment  extends Fragment{
 
+    private static final String[] sMyScope = new String[]{
+            VKScope.FRIENDS,
+            VKScope.WALL,
+            VKScope.PHOTOS,
+            VKScope.NOHTTPS,
+            VKScope.MESSAGES,
+    };
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -37,12 +45,12 @@ public class LoginFragment  extends Fragment{
 
     @OnClick(R.id.login)
     void onLoginButtonClick(){
-        if (ConnectionUtils.isInternetConnection(getContext())){
+        if (!ConnectionUtils.isInternetConnection(getContext())){
             Toast.makeText(getContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        VKSdk.login(getActivity(), VKScope.WALL);
+        VKSdk.login(getActivity(), sMyScope);
     }
 
 
