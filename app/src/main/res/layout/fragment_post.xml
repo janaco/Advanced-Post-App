@@ -15,8 +15,8 @@
         android:gravity="center">
 
         <RelativeLayout
-            android:id="@+id/content"
             android:layout_width="match_parent"
+            android:id="@+id/fon"
             android:layout_height="360dp">
 
             <ImageView
@@ -27,6 +27,11 @@
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:src="@drawable/gradient_blue" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/content"
+                android:layout_height="match_parent"/>
 
             <EditText
                 android:layout_gravity="center"
@@ -48,7 +53,7 @@
                 android:paddingTop="15dp"
                 android:shadowColor="#1e000000"
                 android:shadowDy="0.5"
-                android:text="Отправляюсь в отпуск до 10 сентября. Отвечать буду медленно. Если что-то срочное, упоминайте в беседах или звоните."
+                android:enabled="false"
                 android:textColorHint="@color/black_a24" />
 
 

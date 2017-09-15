@@ -7,10 +7,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -98,8 +100,11 @@ public class StickersModel {
     public ImageView createStickerView(Bitmap bitmap) {
         ImageView imageView = new ImageView(context);
         imageView.setImageBitmap(bitmap);
-        imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT));
+        RelativeLayout.LayoutParams params  =
+                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_VERTICAL);
+        imageView.setLayoutParams(params);
         imageView.setScaleType(ImageView.ScaleType.MATRIX);
         imageView.setOnTouchListener(new OnStickerTouchListener(stickerTouchListener));
 
@@ -150,9 +155,16 @@ public class StickersModel {
             int x = (int) event.getX();
             int y = (int) event.getY();
 
+            RelativeLayout.LayoutParams layoutParams;
 
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
+
+                    layoutParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
+                    layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+                    layoutParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+                    v.setLayoutParams(layoutParams);
+
                     savedMatrix.set(matrix);
                     start.set(event.getX(), event.getY());
                     mode = DRAG;
@@ -194,13 +206,22 @@ public class StickersModel {
                         stickerTouchListener.remove(view);
                     }
                     trashSubscription.dispose();
+
+//                    layoutParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
+//                    layoutParams.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+//                    layoutParams.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+//                    v.setLayoutParams(layoutParams);
+
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (mode == DRAG) {
                         matrix.set(savedMatrix);
                         float dx = event.getX() - start.x;
                         float dy = event.getY() - start.y;
+
                         matrix.postTranslate(dx, dy);
+
+
                     } else if (mode == ZOOM) {
                         float newDist = (float) spacing(event);
                         if (newDist > 10f) {

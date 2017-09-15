@@ -1,9 +1,11 @@
 package com.nandy.vkchanllenge.ui;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +58,8 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     EditText textView;
     @BindView(R.id.content)
     RelativeLayout contentView;
+    @BindView(R.id.fon)
+    RelativeLayout viewFon;
     @BindView(R.id.thumbnails_list)
     RecyclerView thumbnailsList;
     @BindView(R.id.background_view)
@@ -72,7 +77,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     private BackgroundPickerView pickerView;
     private float scaledDensity;
-    public  int screenHeight;
+    public int screenHeight;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -162,7 +167,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @OnClick(R.id.btn_send)
     void onSendButtonClick() {
-        presenter.post(contentView);
+        presenter.post(viewFon);
     }
 
     @Override
@@ -186,7 +191,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     @Override
     public void setBackground(Drawable background) {
         for (ImageView imageView : imageParts) {
-            contentView.removeView(imageView);
+            viewFon.removeView(imageView);
         }
         imageParts.clear();
         backgroundView.setImageDrawable(background);
@@ -195,7 +200,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     @Override
     public void setBackground(String path) {
         for (ImageView imageView : imageParts) {
-            contentView.removeView(imageView);
+            viewFon.removeView(imageView);
         }
         imageParts.clear();
         Glide.with(getContext())
@@ -215,12 +220,12 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @Override
     public void addSticker(ImageView imageView) {
-        contentView.addView(imageView, contentView.getChildCount() - 2);
+        contentView.addView(imageView);
     }
 
     @Override
     public void addBackgroundPart(ImageView imageView) {
-        contentView.addView(imageView, 1);
+        viewFon.addView(imageView);
         imageParts.add(imageView);
     }
 
@@ -255,24 +260,64 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     @Override
     public void showTrash(View viewTrash) {
-        contentView.addView(viewTrash, contentView.getChildCount() - 2);
+        viewFon.addView(viewTrash);
     }
 
     @Override
     public void remove(View viewTrash) {
         contentView.removeView(viewTrash);
+        viewFon.removeView(viewTrash);
     }
 
 
     void applyPostStyle() {
 
-        ValueAnimator anim = ValueAnimator.ofInt(contentView.getMeasuredHeight(), (int) scaledDensity * 360);
+
+        ViewGroup.LayoutParams layoutParams = viewFon.getLayoutParams();
+        layoutParams.height = 1080;
+        viewFon.setLayoutParams(layoutParams);
+
+        for (int i = 0; i < contentView.getChildCount(); i++) {
+            ImageView child = (ImageView) contentView.getChildAt(i);
+            Matrix matrix = child.getImageMatrix();
+            float[] values = new float[9];
+            matrix.getValues(values);
+            float x = values[Matrix.MTRANS_X];
+            float y = values[Matrix.MTRANS_Y];
+
+            int imgHeight = child.getDrawable().getIntrinsicHeight();
+
+            if (y > 1920 / 2) {
+                float bottomMargin = 1920 - y - imgHeight;
+                float dy = 1080 - bottomMargin - imgHeight;
+                float translation = dy - y;
+
+//                matrix.postTranslate(0, translation);
+//                child.setImageMatrix(matrix);
+                Matrix displayMatrix = new Matrix();
+                matrix.postTranslate(0, translation);
+
+                displayMatrix.set(matrix);
+                child.setImageMatrix(displayMatrix);
+
+                Log.d("STICKER_", "child: " + x + ", " + y + ", dest: " + dy + ", tr: " + translation + ", height: " + imgHeight);
+
+            }
+        }
+
+         layoutParams = viewFon.getLayoutParams();
+        layoutParams.height = screenHeight;
+        viewFon.setLayoutParams(layoutParams);
+
+        ValueAnimator anim = ValueAnimator.ofInt(viewFon.getMeasuredHeight(), (int) scaledDensity * 360);
         anim.addUpdateListener(valueAnimator -> {
             int val = (Integer) valueAnimator.getAnimatedValue();
-            ViewGroup.LayoutParams layoutParams = contentView.getLayoutParams();
-            layoutParams.height = val;
-            contentView.setLayoutParams(layoutParams);
+
+            ViewGroup.LayoutParams params = viewFon.getLayoutParams();
+            params.height = val;
+            viewFon.setLayoutParams(params);
         });
+
         anim.setDuration(300);
         anim.start();
     }
@@ -280,15 +325,56 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
     void applyStoryStyle() {
 
-        ValueAnimator anim = ValueAnimator.ofInt(contentView.getMeasuredHeight(), screenHeight);
+
+        ViewGroup.LayoutParams layoutParams = viewFon.getLayoutParams();
+        layoutParams.height = screenHeight;
+        viewFon.setLayoutParams(layoutParams);
+
+        for (int i = 0; i < contentView.getChildCount(); i++) {
+            ImageView child = (ImageView) contentView.getChildAt(i);
+            Matrix matrix = child.getImageMatrix();
+            float[] values = new float[9];
+            matrix.getValues(values);
+            float x = values[Matrix.MTRANS_X];
+            float y = values[Matrix.MTRANS_Y];
+
+            int imgHeight = child.getDrawable().getIntrinsicHeight();
+
+            if (y >  1080 / 2) {
+                float bottomMargin = 1080 - y - imgHeight;
+                float dy = 1920 - bottomMargin - imgHeight;
+                float translation = dy - y;
+
+                Matrix displayMatrix = new Matrix();
+                matrix.postTranslate(0, translation);
+
+                displayMatrix.set(matrix);
+                child.setImageMatrix(displayMatrix);
+
+                Log.d("STICKER_", "child: " + x + ", " + y + ", dest: " + dy + ", tr: " + translation + ", xy: " + child.getX() + ", " + child.getY());
+
+            }
+
+
+        }
+
+         layoutParams = viewFon.getLayoutParams();
+        layoutParams.height = 1080;
+        viewFon.setLayoutParams(layoutParams);
+
+
+        ValueAnimator anim = ValueAnimator.ofInt(viewFon.getMeasuredHeight(), screenHeight);
         anim.addUpdateListener(valueAnimator -> {
             int val = (Integer) valueAnimator.getAnimatedValue();
-            ViewGroup.LayoutParams layoutParams = contentView.getLayoutParams();
-            layoutParams.height = val;
-            contentView.setLayoutParams(layoutParams);
+            ViewGroup.LayoutParams params = viewFon.getLayoutParams();
+            params.height = val;
+            viewFon.setLayoutParams(params);
         });
+
+
         anim.setDuration(300);
         anim.start();
+
 
 
     }
