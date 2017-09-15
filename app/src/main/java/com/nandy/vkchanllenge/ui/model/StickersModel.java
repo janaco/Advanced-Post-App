@@ -28,6 +28,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -100,10 +101,9 @@ public class StickersModel {
     public ImageView createStickerView(Bitmap bitmap) {
         ImageView imageView = new ImageView(context);
         imageView.setImageBitmap(bitmap);
-        RelativeLayout.LayoutParams params  =
-                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_VERTICAL);
+        RelativeLayout.LayoutParams params =
+                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                        RelativeLayout.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(params);
         imageView.setScaleType(ImageView.ScaleType.MATRIX);
         imageView.setOnTouchListener(new OnStickerTouchListener(stickerTouchListener));
@@ -132,7 +132,6 @@ public class StickersModel {
         private float newRot = 0f;
         private float[] lastEvent = null;
 
-
         private StickerTouchListener stickerTouchListener;
 
         public OnStickerTouchListener(StickerTouchListener stickerTouchListener) {
@@ -148,22 +147,17 @@ public class StickersModel {
 
         private Disposable trashSubscription;
 
+
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             // handle touch events here
             ImageView view = (ImageView) v;
-            int x = (int) event.getX();
-            int y = (int) event.getY();
+            float x =  event.getX();
+            float y =  event.getY();
 
-            RelativeLayout.LayoutParams layoutParams;
 
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
-
-                    layoutParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
-                    layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-                    layoutParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
-                    v.setLayoutParams(layoutParams);
 
                     savedMatrix.set(matrix);
                     start.set(event.getX(), event.getY());
@@ -181,6 +175,8 @@ public class StickersModel {
                     trashXRight = trashXLeft + viewTrash.getWidth();
                     trashYTop = (int) viewTrash.getY();
                     trashYBottom = trashYTop + viewTrash.getHeight();
+
+
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
                     oldDist = (float) spacing(event);
@@ -207,10 +203,6 @@ public class StickersModel {
                     }
                     trashSubscription.dispose();
 
-//                    layoutParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
-//                    layoutParams.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
-//                    layoutParams.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-//                    v.setLayoutParams(layoutParams);
 
                     break;
                 case MotionEvent.ACTION_MOVE:
@@ -218,9 +210,7 @@ public class StickersModel {
                         matrix.set(savedMatrix);
                         float dx = event.getX() - start.x;
                         float dy = event.getY() - start.y;
-
                         matrix.postTranslate(dx, dy);
-
 
                     } else if (mode == ZOOM) {
                         float newDist = (float) spacing(event);

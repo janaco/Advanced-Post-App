@@ -1,6 +1,7 @@
 package com.nandy.vkchanllenge.ui;
 
 import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
@@ -273,10 +274,6 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
     void applyPostStyle() {
 
 
-        ViewGroup.LayoutParams layoutParams = viewFon.getLayoutParams();
-        layoutParams.height = 1080;
-        viewFon.setLayoutParams(layoutParams);
-
         for (int i = 0; i < contentView.getChildCount(); i++) {
             ImageView child = (ImageView) contentView.getChildAt(i);
             Matrix matrix = child.getImageMatrix();
@@ -292,8 +289,6 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
                 float dy = 1080 - bottomMargin - imgHeight;
                 float translation = dy - y;
 
-//                matrix.postTranslate(0, translation);
-//                child.setImageMatrix(matrix);
                 Matrix displayMatrix = new Matrix();
                 matrix.postTranslate(0, translation);
 
@@ -304,11 +299,6 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
             }
         }
-
-         layoutParams = viewFon.getLayoutParams();
-        layoutParams.height = screenHeight;
-        viewFon.setLayoutParams(layoutParams);
-
         ValueAnimator anim = ValueAnimator.ofInt(viewFon.getMeasuredHeight(), (int) scaledDensity * 360);
         anim.addUpdateListener(valueAnimator -> {
             int val = (Integer) valueAnimator.getAnimatedValue();
@@ -320,15 +310,12 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
         anim.setDuration(300);
         anim.start();
+
     }
 
 
     void applyStoryStyle() {
 
-
-        ViewGroup.LayoutParams layoutParams = viewFon.getLayoutParams();
-        layoutParams.height = screenHeight;
-        viewFon.setLayoutParams(layoutParams);
 
         for (int i = 0; i < contentView.getChildCount(); i++) {
             ImageView child = (ImageView) contentView.getChildAt(i);
@@ -340,7 +327,7 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
 
             int imgHeight = child.getDrawable().getIntrinsicHeight();
 
-            if (y >  1080 / 2) {
+            if (y > 1080 / 2) {
                 float bottomMargin = 1080 - y - imgHeight;
                 float dy = 1920 - bottomMargin - imgHeight;
                 float translation = dy - y;
@@ -351,16 +338,10 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
                 displayMatrix.set(matrix);
                 child.setImageMatrix(displayMatrix);
 
-                Log.d("STICKER_", "child: " + x + ", " + y + ", dest: " + dy + ", tr: " + translation + ", xy: " + child.getX() + ", " + child.getY());
-
             }
 
 
         }
-
-         layoutParams = viewFon.getLayoutParams();
-        layoutParams.height = 1080;
-        viewFon.setLayoutParams(layoutParams);
 
 
         ValueAnimator anim = ValueAnimator.ofInt(viewFon.getMeasuredHeight(), screenHeight);
@@ -371,11 +352,8 @@ public class PostFragment extends MyFragment implements PostView<PostPresenter>,
             viewFon.setLayoutParams(params);
         });
 
-
         anim.setDuration(300);
         anim.start();
-
-
 
     }
 
