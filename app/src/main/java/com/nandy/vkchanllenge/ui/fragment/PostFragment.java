@@ -1,14 +1,11 @@
-package com.nandy.vkchanllenge.ui;
+package com.nandy.vkchanllenge.ui.fragment;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -34,6 +31,9 @@ import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.SimpleOnTabSelectedListener;
 import com.nandy.vkchanllenge.adapter.ThumbnailsAdapter;
+import com.nandy.vkchanllenge.ui.Background;
+import com.nandy.vkchanllenge.ui.dialog.BackgroundPickerView;
+import com.nandy.vkchanllenge.ui.dialog.StickersDialog;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 import com.nandy.vkchanllenge.ui.model.PostModel;
 import com.nandy.vkchanllenge.ui.model.StickersModel;

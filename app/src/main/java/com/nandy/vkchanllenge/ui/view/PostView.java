@@ -8,9 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.nandy.vkchanllenge.BaseView;
-import com.nandy.vkchanllenge.adapter.ImagesAdapter;
 import com.nandy.vkchanllenge.ui.Background;
-import com.nandy.vkchanllenge.ui.StickersDialog;
+import com.nandy.vkchanllenge.ui.dialog.StickersDialog;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.nandy.vkchanllenge.ui;
+package com.nandy.vkchanllenge.ui.dialog;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.adapter.ImagesAdapter;
+import com.nandy.vkchanllenge.ui.dialog.BottomPopupWindow;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 
 import butterknife.BindView;

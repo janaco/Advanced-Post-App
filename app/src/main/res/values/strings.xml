@@ -6,7 +6,8 @@
     <string name="what_is_new">Что у Вас нового?</string>
     <string name="send">Отправить</string>
     <string name="stickers">Стикеры</string>
-
+    <string name="login">Войти через ВКонтакте</string>
+    <string name="no_internet_connection">Нет подключения к Интернету</string>
 
 
 </resources>

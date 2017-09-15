@@ -1,4 +1,4 @@
-package com.nandy.vkchanllenge.ui;
+package com.nandy.vkchanllenge.ui.dialog;
 
 import android.app.Activity;
 import android.content.Context;

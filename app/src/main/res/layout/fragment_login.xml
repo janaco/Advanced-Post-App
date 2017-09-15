@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@drawable/gradient_login"
+    android:gravity="center_horizontal"
     android:layout_height="match_parent">
+    
+    <ImageView
+        android:layout_width="82dp"
+        android:contentDescription="@string/login"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/ic_logo"
+        android:layout_height="48dp" />
 
-</LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_margin="16dp"
+        android:text="@string/login"
+        style="@style/TextStyle"
+        android:id="@+id/login"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:background="@drawable/login_btn_fon"
+        android:layout_alignParentBottom="true"
+        android:layout_height="48dp" />
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package com.nandy.vkchanllenge.ui;
+package com.nandy.vkchanllenge.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,13 +9,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.adapter.StickersAdapter;
-import com.nandy.vkchanllenge.ui.model.StickersModel;
 
 import java.util.List;
 

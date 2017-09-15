@@ -1,26 +1,20 @@
 package com.nandy.vkchanllenge.ui.presenter;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Layout;
-import android.util.Pair;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.nandy.vkchanllenge.BasePresenter;
 import com.nandy.vkchanllenge.adapter.ImagesAdapter;
 import com.nandy.vkchanllenge.ui.Background;
 import com.nandy.vkchanllenge.ui.BackgroundType;
 import com.nandy.vkchanllenge.ui.Part;
-import com.nandy.vkchanllenge.ui.StickersDialog;
+import com.nandy.vkchanllenge.ui.dialog.StickersDialog;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 import com.nandy.vkchanllenge.ui.model.PostModel;
 import com.nandy.vkchanllenge.ui.model.StickersModel;
@@ -28,10 +22,8 @@ import com.nandy.vkchanllenge.ui.model.TextModel;
 import com.nandy.vkchanllenge.ui.view.PostView;
 
 import java.io.File;
-import java.util.List;
 
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by yana on 07.09.17.

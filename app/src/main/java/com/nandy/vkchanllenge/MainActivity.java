@@ -3,21 +3,52 @@ package com.nandy.vkchanllenge;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
-import com.nandy.vkchanllenge.ui.PostFragment;
+import com.nandy.vkchanllenge.ui.fragment.LoginFragment;
+import com.nandy.vkchanllenge.ui.fragment.PostFragment;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.util.VKUtil;
 
 public class MainActivity extends AppCompatActivity {
+
+    private boolean isResumed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, PostFragment.newInstance(this), PostFragment.class.getSimpleName())
-                .commit();
-    }
+        VKSdk.wakeUpSession(this, new VKCallback<VKSdk.LoginState>() {
+            @Override
+            public void onResult(VKSdk.LoginState res) {
+                if (isResumed) {
+                    switch (res) {
+                        case LoggedOut:
+                            showLoginScreen();
+                            break;
+                        case LoggedIn:
+                            showCreatePostScreen();
+                            break;
+                        case Pending:
+                            break;
+                        case Unknown:
+                            break;
+                    }
+                }
+            }
 
+            @Override
+            public void onError(VKError error) {
+
+            }
+        });
+
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -34,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
+        if (onVkLoginActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
+
         super.onActivityResult(requestCode, resultCode, data);
 
         PostFragment postFragment = (PostFragment)
@@ -42,5 +79,48 @@ public class MainActivity extends AppCompatActivity {
         if (postFragment != null) {
             postFragment.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isResumed = true;
+        if (VKSdk.isLoggedIn()) {
+            showCreatePostScreen();
+        } else {
+            showLoginScreen();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        isResumed = false;
+        super.onPause();
+    }
+
+    private void showCreatePostScreen() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, PostFragment.newInstance(this), PostFragment.class.getSimpleName())
+                .commit();
+    }
+
+    private void showLoginScreen() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new LoginFragment(), LoginFragment.class.getSimpleName())
+                .commit();
+    }
+
+    private boolean onVkLoginActivityResult(int requestCode, int resultCode, Intent data) {
+
+        return VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+            @Override
+            public void onResult(VKAccessToken res) {
+                showCreatePostScreen();
+            }
+
+            @Override
+            public void onError(VKError error) {
+            }
+        });
     }
 }
