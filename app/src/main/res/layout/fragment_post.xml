@@ -25,8 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:src="@drawable/gradient_blue" />
+                android:scaleType="centerCrop" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -204,6 +203,7 @@
                     android:layout_height="32dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
+                    android:enabled="false"
                     android:background="@drawable/send_button_fon"
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center"

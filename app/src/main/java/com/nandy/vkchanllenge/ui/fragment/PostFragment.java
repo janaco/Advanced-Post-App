@@ -31,6 +31,7 @@ import com.nandy.vkchanllenge.MyFragment;
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.SimpleOnTabSelectedListener;
+import com.nandy.vkchanllenge.SimpleTextWatcher;
 import com.nandy.vkchanllenge.adapter.ThumbnailsAdapter;
 import com.nandy.vkchanllenge.ui.Background;
 import com.nandy.vkchanllenge.ui.dialog.BackgroundPickerView;
@@ -71,6 +72,8 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
     TabLayout tabLayout;
     @BindView(R.id.content_root_view)
     View rootView;
+    @BindView(R.id.btn_send)
+    TextView buttonSend;
 
 
     private final List<ImageView> imageParts = new ArrayList<>();
@@ -141,6 +144,14 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         pickerView = new BackgroundPickerView(view);
         pickerView.setBackgroundModel(new BackgroundModel(getContext()));
         pickerView.setOnItemClickListener(presenter);
+
+
+        textView.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence text, int length) {
+                buttonSend.setEnabled(length > 0);
+            }
+        });
     }
 
     @Override

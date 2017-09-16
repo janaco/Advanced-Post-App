@@ -8,7 +8,6 @@
     <color name="grey">#909499</color>
     <color name="grey_light">#ebebeb</color>
     <color name="white">#ffffff</color>
-    <color name="white_a92">#92ffffff</color>
     <color name="cool_blue">#4680c2</color>
     <color name="sun_yellow">#ffcc33</color>
     <color name="orangish">#ff7733</color>
@@ -22,10 +21,37 @@
     <color name="aqua_marine">#30f3d2</color>
     <color name="gradient_blue">#2e7ae6</color>
     <color name="sickly_yellow">#cbe645</color>
-    <color name="cornflower_blue_two_a48">#48528bcc</color>
-    <color name="cornflower_blue_two_a24">#24528bcc</color>
-    <color name="cornflower_blue_two_a72">#72528bcc</color>
-    <color name="black_a24">#242c2d2e</color>
+    <color name="cornflower_blue_two_a48">#80528bcc</color>
+    <color name="cornflower_blue_two_a24">#40528bcc</color>
+    <color name="cornflower_blue_two_a72">#B3528bcc</color>
+    <color name="black_a24">#402c2d2e</color>
     <color name="highlight">#5cffffff</color>
     <color name="transparent">#00ffffff</color>
+    <color name="white_a92">#E6ffffff</color>
+    <color name="white_a24">#40ffffff</color>
+
+
+
+    <!--100% — FF-->
+    <!--95% — F2-->
+    <!--90% — E6-->
+    <!--85% — D9-->
+    <!--80% — CC-->
+    <!--75% — BF-->
+    <!--70% — B3-->
+    <!--65% — A6-->
+    <!--60% — 99-->
+    <!--55% — 8C-->
+    <!--50% — 80-->
+    <!--45% — 73-->
+    <!--40% — 66-->
+    <!--35% — 59-->
+    <!--30% — 4D-->
+    <!--25% — 40-->
+    <!--20% — 33-->
+    <!--15% — 26-->
+    <!--10% — 1A-->
+    <!--5% — 0D-->
+    <!--0% — 00-->
+
 </resources>
