@@ -212,6 +212,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
     @Override
     public void setThumbnails(Background[] background) {
         thumbnailsAdapter = new ThumbnailsAdapter(background);
+        thumbnailsAdapter.setScale((int) scaledDensity);
         thumbnailsAdapter.setOnListItemClickListener(presenter);
         thumbnailsList.setAdapter(thumbnailsAdapter);
     }

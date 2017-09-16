@@ -66,9 +66,6 @@ public class BackgroundPickerView extends BottomPopupWindow {
     @Override
     public void afterWindowShown() {
 
-        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(imagesList.getWindowToken(), 0);
-
         onItemClickListener.onImageSelected(adapter.getSelected());
     }
 

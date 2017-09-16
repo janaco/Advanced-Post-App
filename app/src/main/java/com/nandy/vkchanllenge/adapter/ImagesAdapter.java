@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -35,6 +36,8 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     private int checkedPosition = VIEW_IMAGE;
     private OnBackgroundChooseListener onItemClickListener;
 
+    private int scale = 3;
+
     public ImagesAdapter(List<String> files) {
         this.files = files;
     }
@@ -43,7 +46,11 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
         this.onItemClickListener = onItemClickListener;
     }
 
-    public String getSelected(){
+    public void setScale(int scale) {
+        this.scale = scale;
+    }
+
+    public String getSelected() {
         return files.get(checkedPosition);
     }
 
@@ -57,16 +64,18 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        String path = files.get(position);
+        String path = null;
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.imageView.getLayoutParams();
 
+        int margin = 4 * scale;
         if (position == 0 || position == 1) {
-            holder.imageView.setPadding(48, 12, 12, 12);
+            params.setMargins(16*scale, margin, margin, margin);
         } else if (position == getItemCount() - 1) {
-            holder.imageView.setPadding(12, 12, 48, 12);
-
+            params.setMargins(margin, margin,margin*16,margin);
         } else {
-            holder.imageView.setPadding(12, 12, 12, 12);
+            params.setMargins(margin, margin, margin, margin);
         }
+        holder.imageView.setLayoutParams(params);
 
         if (position == VIEW_CAMERA) {
 
@@ -77,6 +86,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
 
             boolean checked = position == checkedPosition;
             position -= 2;
+            path = files.get(position);
 
 
             if (checked) {
@@ -84,22 +94,23 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
                 Glide
                         .with(holder.imageView.getContext())
                         .load(Uri.fromFile(new File(path)))
-                        .override(252, 252)
+                        .override(scale*84, scale*84)
                         .bitmapTransform(new CenterCrop(holder.imageView.getContext()),
-                                new RoundedCornersTransformation(holder.imageView.getContext(), 12, 6, ContextCompat.getColor(holder.imageView.getContext(), R.color.cornflower_blue_two), 6))
+                                new RoundedCornersTransformation(holder.imageView.getContext(), scale*4, scale*2, ContextCompat.getColor(holder.imageView.getContext(), R.color.cornflower_blue_two), scale*2))
                         .into(holder.imageView);
             } else {
 
                 Glide
                         .with(holder.imageView.getContext())
                         .load(Uri.fromFile(new File(path)))
-                        .override(252, 252)
+                        .override(scale*84, scale*84)
                         .bitmapTransform(new CenterCrop(holder.imageView.getContext()),
-                                new RoundedCornersTransformation(holder.imageView.getContext(), 12, 0))
+                                new RoundedCornersTransformation(holder.imageView.getContext(), scale*4, 0))
                         .into(holder.imageView);
             }
         }
 
+        String finalPath = path;
         holder.imageView.setOnClickListener(view -> {
 
             switch (holder.getAdapterPosition()) {
@@ -113,7 +124,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
                     break;
 
                 default:
-                    onItemClickListener.onImageSelected(path);
+                    onItemClickListener.onImageSelected(finalPath);
                     checkedPosition = holder.getAdapterPosition();
                     notifyDataSetChanged();
                     break;
