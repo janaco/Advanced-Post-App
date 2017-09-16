@@ -10,20 +10,28 @@ import com.nandy.vkchanllenge.R;
 
 public enum Highlight {
 
-    WHITE(R.color.white, R.color.black),
-    WHITE_INVERTED(R.color.black, R.color.white),
-    TRANSPARENT(R.color.white_a24, R.color.white),
-    TRANSPARENT_INVERTED(R.color.black_a24, R.color.white),
-    NONE(R.color.transparent, R.color.white);
+    WHITE(0, R.color.white, R.color.black),
+    WHITE_INVERTED(0, R.color.black, R.color.white),
+    TRANSPARENT(1, R.color.white_a24, R.color.white),
+    TRANSPARENT_INVERTED(1, R.color.black_a24, R.color.white),
+    NONE(2, R.color.transparent, R.color.white);
 
     @ColorRes
-    int backgroundColor;
+    private int backgroundColor;
     @ColorRes
-    int textColor;
+    private int textColor;
 
-    Highlight(@ColorRes int backgroundColor, @ColorRes int textColor) {
+    private int index;
+
+    Highlight(int index, @ColorRes int backgroundColor, @ColorRes int textColor) {
         this.backgroundColor = backgroundColor;
         this.textColor = textColor;
+        this.index = index;
+    }
+
+
+    public int getIndex() {
+        return index;
     }
 
     public int getBackgroundColor() {

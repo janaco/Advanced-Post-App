@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
 
     <LinearLayout
+        android:id="@+id/content_root_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/content_root_view"
         android:gravity="center">
 
         <RelativeLayout
-            android:layout_width="match_parent"
             android:id="@+id/fon"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
@@ -28,42 +28,39 @@
                 android:scaleType="centerCrop" />
 
             <RelativeLayout
-                android:layout_width="match_parent"
                 android:id="@+id/content"
-                android:layout_height="match_parent"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
             <com.nandy.vkchanllenge.HighlightedEditText
-                android:layout_gravity="center"
                 android:id="@+id/text_view"
                 style="@style/TextStyle5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:inputType="textMultiLine|textVisiblePassword|textNoSuggestions"
+                android:layout_gravity="center"
                 android:layout_margin="24dp"
                 android:background="@null"
-                android:hint="@string/what_is_new"
                 android:descendantFocusability="blocksDescendants"
-                android:paddingBottom="15dp"
-                android:paddingEnd="5dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingStart="5dp"
-                android:paddingTop="15dp"
+                android:gravity="center"
+                android:hint="@string/what_is_new"
+                android:inputType="textMultiLine|textVisiblePassword|textNoSuggestions"
+                android:padding="15dp"
+                android:maxLength="130"
                 android:shadowColor="#1e000000"
                 android:shadowDy="0.5"
                 android:textColorHint="@color/black_a24" />
 
 
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/trash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|bottom"
-                android:scaleType="centerCrop"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_trash" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_trash"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
@@ -77,9 +74,10 @@
 
         <View
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:alpha="0.92"
-            android:background="@color/white"
-            android:layout_height="match_parent"/>
+            android:background="@color/white" />
+
         <RelativeLayout
             android:id="@+id/btn_font"
             android:layout_width="48dp"
@@ -106,21 +104,21 @@
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="wrap_content"
-                app:tabGravity="center"
-                app:tabBackground="@null"
-                app:tabPaddingStart="12dp"
-                android:scaleY="-1"
-                app:tabPaddingEnd="12dp"
-                app:tabPaddingTop="16dp"
-                app:tabPaddingBottom="16dp"
-                android:alpha="1"
-                app:tabTextColor="@color/cornflower_blue_two_a72"
-                app:tabSelectedTextColor="@color/cornflower_blue_two"
-                app:tabIndicatorColor="@color/cornflower_blue_two"
                 android:layout_height="wrap_content"
+                android:alpha="1"
                 android:fontFamily="sans-serif-medium"
+                android:scaleY="-1"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:tabBackground="@null"
+                app:tabGravity="center"
+                app:tabIndicatorColor="@color/cornflower_blue_two"
                 app:tabIndicatorHeight="2dp"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+                app:tabPaddingBottom="16dp"
+                app:tabPaddingEnd="12dp"
+                app:tabPaddingStart="12dp"
+                app:tabPaddingTop="16dp"
+                app:tabSelectedTextColor="@color/cornflower_blue_two"
+                app:tabTextColor="@color/cornflower_blue_two_a72" />
 
         </LinearLayout>
 
@@ -167,62 +165,61 @@
 
             <View
                 android:layout_width="match_parent"
-                android:background="@color/white"
+                android:layout_height="match_parent"
                 android:alpha="0.92"
-                android:layout_height="match_parent"/>
+                android:background="@color/white" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@+id/delimiter"
                 android:layout_toStartOf="@id/delimiter"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/thumbnails_list"
                     android:layout_width="match_parent"
-                    android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     tools:listitem="@layout/item_thumbnail" />
             </LinearLayout>
 
             <View
+                android:id="@+id/delimiter"
                 android:layout_width="0.5dp"
                 android:layout_height="match_parent"
-                android:id="@+id/delimiter"
-                android:alpha="0.12"
                 android:layout_toLeftOf="@+id/btn_send"
                 android:layout_toStartOf="@+id/btn_send"
+                android:alpha="0.12"
                 android:background="@color/black" />
 
 
-                <TextView
-                    android:id="@+id/btn_send"
-                    android:layout_width="111dp"
-                    android:layout_height="32dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:enabled="false"
-                    android:background="@drawable/send_button_fon"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:letterSpacing="0.04"
-                    android:paddingEnd="16dp"
-                    android:paddingLeft="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_centerVertical="true"
-                    android:paddingRight="16dp"
-                    android:alpha="1"
-                    android:paddingStart="16dp"
-                    android:text="@string/send"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:textStyle="normal" />
-
+            <TextView
+                android:id="@+id/btn_send"
+                android:layout_width="111dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:alpha="1"
+                android:background="@drawable/send_button_fon"
+                android:enabled="false"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingStart="16dp"
+                android:text="@string/send"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="normal" />
 
 
         </RelativeLayout>

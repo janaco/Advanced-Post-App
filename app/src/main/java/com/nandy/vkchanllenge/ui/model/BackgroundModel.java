@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.nandy.vkchanllenge.ui.Background;
+import com.nandy.vkchanllenge.ui.Highlight;
 import com.nandy.vkchanllenge.ui.Part;
 
 import java.io.File;
@@ -36,6 +37,8 @@ import io.reactivex.schedulers.Schedulers;
 public class BackgroundModel {
 
     private Context context;
+    private Background background = Background.WHITE;
+    private int highlightIndex = 0;
 
     public BackgroundModel(Context context) {
         this.context = context;
@@ -45,8 +48,21 @@ public class BackgroundModel {
         return Background.values();
     }
 
+    public Highlight highlightText(){
+        highlightIndex = highlightIndex < background.getHighlights().length ? highlightIndex : 0;
+        return background.getHighlights()[highlightIndex++];
+
+    }
+
+    public Highlight resetHighlight(){
+        highlightIndex = Highlight.NONE.getIndex();
+        return background.getHighlights()[highlightIndex++];
+    }
+
     @Nullable
     public Drawable loadBackground(Background background) {
+
+        this.background = background;
 
 
         switch (background.getType()) {

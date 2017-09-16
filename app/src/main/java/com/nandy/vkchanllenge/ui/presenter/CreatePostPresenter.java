@@ -13,12 +13,11 @@ import com.nandy.vkchanllenge.BasePresenter;
 import com.nandy.vkchanllenge.adapter.ImagesAdapter;
 import com.nandy.vkchanllenge.ui.Background;
 import com.nandy.vkchanllenge.ui.BackgroundType;
+import com.nandy.vkchanllenge.ui.Highlight;
 import com.nandy.vkchanllenge.ui.Part;
 import com.nandy.vkchanllenge.ui.dialog.StickersDialog;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
-import com.nandy.vkchanllenge.ui.model.PostModel;
 import com.nandy.vkchanllenge.ui.model.StickersModel;
-import com.nandy.vkchanllenge.ui.model.TextModel;
 import com.nandy.vkchanllenge.ui.view.PostView;
 
 import java.io.File;
@@ -38,7 +37,6 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
     private PostView<CreatePostPresenter> view;
 
     private BackgroundModel backgroundModel;
-    private TextModel textModel;
     private StickersModel stickersModel;
 
 
@@ -56,9 +54,6 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
         this.stickersModel = stickersModel;
     }
 
-    public void setTextModel(TextModel textModel) {
-        this.textModel = textModel;
-    }
 
     @Override
     public void start() {
@@ -74,11 +69,6 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
             stickersSubscription.dispose();
         }
 
-
-
-//        if (imagesSubscription != null && !imagesSubscription.isDisposed()){
-//            imagesSubscription.dispose();
-//        }
     }
 
     @Override
@@ -87,6 +77,7 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
     }
 
     public void onThumbnailSelected(Background background) {
+        view.highlight(backgroundModel.resetHighlight());
         if (background.getType() == BackgroundType.CUSTOM) {
             return;
         }
@@ -147,8 +138,8 @@ view.setBackground(path);
     }
 
 
-    public void highlightText(Layout layout) {
-        view.highlight(textModel.highlightText(layout));
+    public void highlightText() {
+        view.highlight(backgroundModel.highlightText());
 
     }
 

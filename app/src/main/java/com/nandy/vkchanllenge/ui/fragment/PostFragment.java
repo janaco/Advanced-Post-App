@@ -1,30 +1,23 @@
 package com.nandy.vkchanllenge.ui.fragment;
 
-import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.Html;
-import android.text.Layout;
 import android.text.Spannable;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,7 +26,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.nandy.vkchanllenge.HighlightedEditText;
-import com.nandy.vkchanllenge.MainActivity;
 import com.nandy.vkchanllenge.MyFragment;
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
@@ -41,12 +33,12 @@ import com.nandy.vkchanllenge.SimpleOnTabSelectedListener;
 import com.nandy.vkchanllenge.SimpleTextWatcher;
 import com.nandy.vkchanllenge.adapter.ThumbnailsAdapter;
 import com.nandy.vkchanllenge.ui.Background;
+import com.nandy.vkchanllenge.ui.Highlight;
 import com.nandy.vkchanllenge.ui.dialog.BackgroundPickerView;
 import com.nandy.vkchanllenge.ui.dialog.StickersDialog;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 import com.nandy.vkchanllenge.ui.model.PostModel;
 import com.nandy.vkchanllenge.ui.model.StickersModel;
-import com.nandy.vkchanllenge.ui.model.TextModel;
 import com.nandy.vkchanllenge.ui.presenter.CreatePostPresenter;
 import com.nandy.vkchanllenge.ui.presenter.PublishPresenter;
 import com.nandy.vkchanllenge.ui.view.PostView;
@@ -81,6 +73,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
     View rootView;
     @BindView(R.id.btn_send)
     TextView buttonSend;
+
 
     private final List<ImageView> imageParts = new ArrayList<>();
 
@@ -152,6 +145,8 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         pickerView.setOnItemClickListener(presenter);
 
 
+        textView.setCornerRadius(scaledDensity * 4);
+        textView.setHighlightStyle(Highlight.WHITE_INVERTED);
         textView.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence text, int length) {
@@ -159,9 +154,9 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
             }
         });
 
-        if (tabLayout.getSelectedTabPosition() == 0){
+        if (tabLayout.getSelectedTabPosition() == 0) {
             applyPostStyle();
-        }else {
+        } else {
             applyStoryStyle();
         }
 
@@ -176,10 +171,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
 
     @OnClick(R.id.btn_font)
     void onFontButtonClick() {
-
-
-        presenter.highlightText(textView.getLayout());
-
+        presenter.highlightText();
     }
 
     @OnClick(R.id.btn_sticker)
@@ -206,11 +198,9 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         publishPresenter.setPostModel(new PostModel(viewFon));
         fragment.setPresenter(publishPresenter);
 
-
-        int commit = (getActivity()).getSupportFragmentManager().beginTransaction()
+        getActivity().getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, fragment, SendingFragment.class.getSimpleName())
                 .commit();
-        Log.d("POST_", "send: " + commit);
     }
 
     @Override
@@ -252,8 +242,8 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
     }
 
     @Override
-    public void highlight(Spannable spannableText) {
-        textView.setText(spannableText);
+    public void highlight(Highlight highlight) {
+        textView.setHighlightStyle(highlight);
     }
 
     @Override
@@ -406,7 +396,6 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
 
         CreatePostPresenter presenter = new CreatePostPresenter(fragment);
         presenter.setBackgroundModel(new BackgroundModel(context));
-        presenter.setTextModel(new TextModel(context));
         StickersModel stickersModel = new StickersModel(context);
         stickersModel.setStickerTouchListener(presenter);
         presenter.setStickersModel(stickersModel);

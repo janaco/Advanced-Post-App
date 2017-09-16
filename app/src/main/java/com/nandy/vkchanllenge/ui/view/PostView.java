@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.nandy.vkchanllenge.BaseView;
 import com.nandy.vkchanllenge.ui.Background;
+import com.nandy.vkchanllenge.ui.Highlight;
 import com.nandy.vkchanllenge.ui.dialog.StickersDialog;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
 
     void setBackground(String path);
 
-    void highlight(Spannable spannableText);
+    void highlight(Highlight style);
 
     void showStickersPopup(List<Bitmap> stickers, StickersDialog.OnStickerSelectedListener listener);
 
