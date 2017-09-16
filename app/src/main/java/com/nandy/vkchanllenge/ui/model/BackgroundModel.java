@@ -94,20 +94,6 @@ public class BackgroundModel {
         return imageView;
     }
 
-
-    public static final String CAMERA_IMAGE_BUCKET_NAME =
-            Environment.getExternalStorageDirectory().toString();
-    public static final String CAMERA_IMAGE_BUCKET_ID =
-            getBucketId(CAMERA_IMAGE_BUCKET_NAME);
-
-    /**
-     * Matches code in MediaProvider.computeBucketValues. Should be a common
-     * function.
-     */
-    public static String getBucketId(String path) {
-        return String.valueOf(path.toLowerCase().hashCode());
-    }
-
     public Single<List<String>> loadImages() {
 
         Single<List<String>> single = Single.create(e -> {

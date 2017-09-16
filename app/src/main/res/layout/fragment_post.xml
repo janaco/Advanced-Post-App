@@ -41,7 +41,7 @@
                 android:layout_centerInParent="true"
                 android:inputType="textMultiLine|textVisiblePassword|textNoSuggestions"
                 android:layout_margin="24dp"
-                android:background="@null"
+                android:background="@drawable/login_btn_fon"
                 android:hint="@string/what_is_new"
                 android:descendantFocusability="blocksDescendants"
                 android:paddingBottom="15dp"

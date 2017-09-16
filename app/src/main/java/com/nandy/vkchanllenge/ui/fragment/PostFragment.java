@@ -11,7 +11,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.Html;
+import android.text.Layout;
 import android.text.Spannable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -152,6 +156,8 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
                 buttonSend.setEnabled(length > 0);
             }
         });
+
+
     }
 
     @Override
