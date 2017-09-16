@@ -1,11 +1,13 @@
 package com.nandy.vkchanllenge.ui.fragment;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -78,7 +80,6 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
     View rootView;
     @BindView(R.id.btn_send)
     TextView buttonSend;
-
 
     private final List<ImageView> imageParts = new ArrayList<>();
 
@@ -337,6 +338,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
 
             }
         }
+
         ValueAnimator anim = ValueAnimator.ofInt(viewFon.getMeasuredHeight(), (int) scaledDensity * 360);
         anim.addUpdateListener(valueAnimator -> {
             int val = (Integer) valueAnimator.getAnimatedValue();
