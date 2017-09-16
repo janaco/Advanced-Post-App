@@ -5,6 +5,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.adapter.ImagesAdapter;
@@ -64,6 +65,10 @@ public class BackgroundPickerView extends BottomPopupWindow {
 
     @Override
     public void afterWindowShown() {
+
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(imagesList.getWindowToken(), 0);
+
         onItemClickListener.onImageSelected(adapter.getSelected());
     }
 

@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -164,7 +165,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         } else {
             applyStoryStyle();
         }
-textView.requestFocus();
+        textView.requestFocus();
     }
 
     @Override
@@ -280,8 +281,14 @@ textView.requestFocus();
     @Override
     public void showImagesPopup() {
 
+        showKeyboard();
         pickerView.showPopup();
 
+    }
+
+    private void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(textView, 0);
     }
 
     @Override

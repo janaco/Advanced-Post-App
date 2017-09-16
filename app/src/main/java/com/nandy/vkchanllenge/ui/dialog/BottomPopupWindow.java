@@ -59,7 +59,7 @@ public abstract class BottomPopupWindow {
             popupWindow.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
             resize();
             afterWindowShown();
-        }, 10L);
+        }, 500);
     }
 
     public abstract View onCreateView(Context context, View parent);
