@@ -1,11 +1,17 @@
 package com.nandy.vkchanllenge.ui.model;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 
+import com.nandy.vkchanllenge.PostType;
 import com.nandy.vkchanllenge.api.VkApi;
 
 import java.io.File;
@@ -25,11 +31,15 @@ import io.reactivex.schedulers.Schedulers;
 
 public class PostModel {
 
+    private static final int IMAGE_WIDTH = 1080;
+
     private View view;
     private VkApi api;
+    private PostType postType;
 
-    public PostModel(View view) {
+    public PostModel(View view, PostType postType) {
         this.view = view;
+        this.postType = postType;
     }
 
     public void initApi(VkApi.Callback callback) {
@@ -46,34 +56,25 @@ public class PostModel {
     }
 
     private Bitmap convertToBitmap(View view) {
-        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Pair<Integer, Integer> size = getImageSize();
+        Bitmap bitmap = Bitmap.createBitmap(size.first, size.second, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);
 
-        Log.d("POST_", "bitmap: " + bitmap);
         return bitmap;
     }
 
-    private File saveAsImage(Bitmap bitmap) throws FileNotFoundException {
+    private Pair<Integer, Integer> getImageSize(){
+        switch (postType){
 
+            case POST:
+                return new Pair<>(IMAGE_WIDTH, IMAGE_WIDTH);
 
-        File file = new File(Environment.getExternalStorageDirectory(), "image_" + System.currentTimeMillis() + ".png");
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            case STORY:
+                return new Pair<>(IMAGE_WIDTH, IMAGE_WIDTH * view.getHeight()/view.getWidth());
         }
 
-        return file;
-
+        return new Pair<>(1080, 1080);
     }
+
 }

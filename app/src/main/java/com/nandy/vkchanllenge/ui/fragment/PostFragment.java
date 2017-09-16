@@ -28,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.nandy.vkchanllenge.HighlightedEditText;
 import com.nandy.vkchanllenge.MyFragment;
 import com.nandy.vkchanllenge.OnListItemClickListener;
+import com.nandy.vkchanllenge.PostType;
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.SimpleOnTabSelectedListener;
 import com.nandy.vkchanllenge.SimpleTextWatcher;
@@ -74,6 +75,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
     @BindView(R.id.btn_send)
     TextView buttonSend;
 
+    private PostType postType;
 
     private final List<ImageView> imageParts = new ArrayList<>();
 
@@ -195,7 +197,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         SendingFragment fragment = new SendingFragment();
 
         PublishPresenter publishPresenter = new PublishPresenter(fragment);
-        publishPresenter.setPostModel(new PostModel(viewFon));
+        publishPresenter.setPostModel(new PostModel(viewFon, postType));
         fragment.setPresenter(publishPresenter);
 
         getActivity().getSupportFragmentManager().beginTransaction()
@@ -304,7 +306,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
 
 
     void applyPostStyle() {
-
+        postType = PostType.POST;
 
         for (int i = 0; i < contentView.getChildCount(); i++) {
             ImageView child = (ImageView) contentView.getChildAt(i);
@@ -326,9 +328,6 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
 
                 displayMatrix.set(matrix);
                 child.setImageMatrix(displayMatrix);
-
-                Log.d("STICKER_", "child: " + x + ", " + y + ", dest: " + dy + ", tr: " + translation + ", height: " + imgHeight);
-
             }
         }
 
@@ -348,6 +347,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
 
 
     void applyStoryStyle() {
+        postType = PostType.STORY;
 
 
         for (int i = 0; i < contentView.getChildCount(); i++) {

@@ -102,21 +102,6 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void showPostingFragment(View viewFon){
-        SendingFragment fragment = new SendingFragment();
-
-        PublishPresenter publishPresenter = new PublishPresenter(fragment);
-        publishPresenter.setPostModel(new PostModel(viewFon));
-        fragment.setPresenter(publishPresenter);
-
-
-        int commit = getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, fragment, SendingFragment.class.getSimpleName())
-                .commitAllowingStateLoss();
-        Log.d("POST_", "send: " + commit);
-
-    }
-
     private boolean onVkLoginActivityResult(int requestCode, int resultCode, Intent data) {
 
         return VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
