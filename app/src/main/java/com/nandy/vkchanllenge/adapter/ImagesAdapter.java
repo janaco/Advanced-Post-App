@@ -43,6 +43,10 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
         this.onItemClickListener = onItemClickListener;
     }
 
+    public String getSelected(){
+        return files.get(checkedPosition);
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -98,7 +102,6 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
 
         holder.imageView.setOnClickListener(view -> {
 
-            Log.d("IMAGES_", "onItemClick: " + holder.getAdapterPosition());
             switch (holder.getAdapterPosition()) {
 
                 case VIEW_CAMERA:

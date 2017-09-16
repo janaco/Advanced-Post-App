@@ -20,7 +20,7 @@ import android.widget.PopupWindow;
  * Created by yana on 11.09.17.
  */
 
-public abstract  class BottomPopupWindow {
+public abstract class BottomPopupWindow {
     private int screenHeight = -1;
     private int popupHeight = -1;
     private PopupWindow popupWindow;
@@ -28,25 +28,25 @@ public abstract  class BottomPopupWindow {
 
 
     public BottomPopupWindow(View parentView) {
-            this.parentView = parentView;
+        this.parentView = parentView;
 
-            parentView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                screenHeight = screenHeight == -1 && bottom > oldBottom ? bottom : screenHeight;
+        parentView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            screenHeight = screenHeight == -1 && bottom > oldBottom ? bottom : screenHeight;
 
-                int dHeight = oldBottom - bottom;
-                boolean validHeight = popupHeight == -1 && dHeight > 80 && bottom != oldBottom;
+            int dHeight = oldBottom - bottom;
+            boolean validHeight = popupHeight == -1 && dHeight > 80 && bottom != oldBottom;
 
-                popupHeight = validHeight ? dHeight : popupHeight != (dHeight) && dHeight > 0 ? dHeight : popupHeight;
+            popupHeight = validHeight ? dHeight : popupHeight != (dHeight) && dHeight > 0 ? dHeight : popupHeight;
 
-                if (screenHeight == bottom) {
-                    dismiss();
-                }
+            if (screenHeight == bottom) {
+                dismiss();
+            }
 
-                resize();
-            });
+            resize();
+        });
     }
 
-    public Context getContext(){
+    public Context getContext() {
         return parentView.getContext();
     }
 
@@ -55,20 +55,18 @@ public abstract  class BottomPopupWindow {
             createPopupWindowView();
         }
 
-        if (!isShowed()) {
-            new Handler().postDelayed(() -> {
-                popupWindow.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
-                resize();
-            }, 10L);
-
-        } else {
-            dismiss();
-        }
+        new Handler().postDelayed(() -> {
+            popupWindow.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
+            resize();
+            afterWindowShown();
+        }, 10L);
     }
 
     public abstract View onCreateView(Context context, View parent);
 
     public abstract void onViewCreated(View view);
+
+    public abstract void afterWindowShown();
 
     public void createPopupWindowView() {
 

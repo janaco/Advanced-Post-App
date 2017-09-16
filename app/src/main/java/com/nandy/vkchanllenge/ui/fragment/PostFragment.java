@@ -7,12 +7,13 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.nandy.vkchanllenge.HighlightedEditText;
 import com.nandy.vkchanllenge.MyFragment;
-import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.PostType;
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.SimpleOnTabSelectedListener;
@@ -45,17 +44,19 @@ import com.nandy.vkchanllenge.ui.view.PostView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 
 /**
  * Created by yana on 07.09.17.
  */
 
-public class PostFragment extends MyFragment implements PostView<CreatePostPresenter>,
-        OnListItemClickListener<Background> {
+public class PostFragment extends MyFragment implements PostView<CreatePostPresenter> {
 
     @BindView(R.id.text_view)
     HighlightedEditText textView;
@@ -73,6 +74,9 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
     View rootView;
     @BindView(R.id.btn_send)
     TextView buttonSend;
+    @BindView(R.id.bottom_bar)
+    View toolbarBottom;
+
 
     private PostType postType;
 
@@ -160,7 +164,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         } else {
             applyStoryStyle();
         }
-
+textView.requestFocus();
     }
 
     @Override
@@ -203,21 +207,11 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
                 .commit();
     }
 
-    @Override
-    public void onListItemClick(Background background, int position) {
-
-        if (background == Background.CUSTOM) {
-            pickerView.showPopup();
-            return;
-        }
-        presenter.onThumbnailSelected(background);
-    }
-
 
     @Override
     public void setThumbnails(Background[] background) {
         thumbnailsAdapter = new ThumbnailsAdapter(background);
-        thumbnailsAdapter.setOnListItemClickListener(this);
+        thumbnailsAdapter.setOnListItemClickListener(presenter);
         thumbnailsList.setAdapter(thumbnailsAdapter);
     }
 
@@ -283,6 +277,23 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         return false;
     }
 
+    @Override
+    public void showImagesPopup() {
+
+        pickerView.showPopup();
+
+    }
+
+    @Override
+    public void requestPermission(int requestCode, String... permissions) {
+        ActivityCompat.requestPermissions(getActivity(), permissions, requestCode);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        presenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
     @Override
     public void showTrash(View viewTrash) {

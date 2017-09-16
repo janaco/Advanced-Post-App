@@ -26,6 +26,8 @@ public class BackgroundPickerView extends BottomPopupWindow {
 
     private ImagesAdapter.OnBackgroundChooseListener onItemClickListener;
 
+    private ImagesAdapter adapter;
+
     private Disposable imagesSubscription;
     private BackgroundModel backgroundModel;
 
@@ -53,16 +55,26 @@ public class BackgroundPickerView extends BottomPopupWindow {
         imagesList.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false));
 
         imagesSubscription = backgroundModel.loadImages().subscribe(files -> {
-            ImagesAdapter adapter = new ImagesAdapter(files);
+            adapter = new ImagesAdapter(files);
             adapter.setOnItemClickListener(onItemClickListener);
-            setImagesAdapter(adapter);
+            imagesList.setAdapter(adapter);
+
         });
     }
 
-    public void setImagesAdapter(ImagesAdapter imagesAdapter) {
-        imagesList.setAdapter(imagesAdapter);
-
+    @Override
+    public void afterWindowShown() {
+        onItemClickListener.onImageSelected(adapter.getSelected());
     }
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        if (imagesSubscription != null && !imagesSubscription.isDisposed()) {
+            imagesSubscription.dispose();
+        }
+    }
+
 
 
 }

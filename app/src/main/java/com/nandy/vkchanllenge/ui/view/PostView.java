@@ -30,6 +30,8 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
 
     void showStickersPopup(List<Bitmap> stickers, StickersDialog.OnStickerSelectedListener listener);
 
+    void showImagesPopup();
+
     void addSticker(ImageView imageView);
 
     void addBackgroundPart(ImageView imageView);
@@ -39,5 +41,7 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
     void showTrash(View viewTrash);
 
     void remove(View view);
+
+    void requestPermission(int requestCode, String... permission);
 
 }

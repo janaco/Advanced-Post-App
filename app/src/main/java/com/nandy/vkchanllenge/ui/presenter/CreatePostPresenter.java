@@ -1,15 +1,18 @@
 package com.nandy.vkchanllenge.ui.presenter;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.view.View;
 
 import com.nandy.vkchanllenge.BasePresenter;
+import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.adapter.ImagesAdapter;
 import com.nandy.vkchanllenge.ui.Background;
 import com.nandy.vkchanllenge.ui.BackgroundType;
@@ -29,10 +32,11 @@ import io.reactivex.disposables.Disposable;
  */
 
 public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStickerSelectedListener,
-        ImagesAdapter.OnBackgroundChooseListener , StickersModel.StickerTouchListener{
+        ImagesAdapter.OnBackgroundChooseListener, StickersModel.StickerTouchListener, OnListItemClickListener<Background> {
 
     private static final int REQUEST_CODE_GALLERY = 108;
     private static final int REQUEST_CODE_CAMERA = 109;
+    private static final int REQUEST_CODE_FILE_SYSTEM = 111;
 
     private PostView<CreatePostPresenter> view;
 
@@ -73,11 +77,33 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
     }
 
     @Override
+    public void onListItemClick(Background background, int position) {
+
+        if (background == Background.CUSTOM) {
+
+            if (backgroundModel.hasFileSystemAccessPermission()) {
+                view.showImagesPopup();
+            } else {
+                view.requestPermission(REQUEST_CODE_FILE_SYSTEM, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            return;
+        }
+        onThumbnailSelected(background);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == REQUEST_CODE_FILE_SYSTEM && backgroundModel.hasFileSystemAccessPermission()) {
+            view.showImagesPopup();
+        }
+    }
+
+    @Override
     public void onStickerSelected(Bitmap bitmap) {
         view.addSticker(stickersModel.createStickerView(bitmap));
     }
 
-    public void onThumbnailSelected(Background background) {
+    private void onThumbnailSelected(Background background) {
         if (background.getType() == BackgroundType.CUSTOM) {
             return;
         }
@@ -115,7 +141,7 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
 
     @Override
     public void onImageSelected(String path) {
-view.setBackground(path);
+        view.setBackground(path);
     }
 
     public void onActivityResult(int requestCode, Intent data) {
@@ -133,7 +159,7 @@ view.setBackground(path);
 
         }
 
-        if (path != null){
+        if (path != null) {
             view.setBackground(path);
         }
     }

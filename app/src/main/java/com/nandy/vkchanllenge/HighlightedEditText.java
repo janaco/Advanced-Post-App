@@ -132,62 +132,8 @@ public class HighlightedEditText extends android.support.v7.widget.AppCompatEdit
 
         getLineBounds(firstLine, bounds);
         path.lineTo(bounds.exactCenterX() + firstLineWidth / 4, bounds.top);
-//        path.lineTo(bounds.exactCenterX() + firstLineWidth / 2, bounds.exactCenterY());
 
         canvas.drawPath(path, backgroundPaint);
     }
 
-
-//    private void highlight(Canvas canvas) {
-//        path.reset();
-//        widths.clear();
-//
-//        final int lineCount = getLineCount();
-//        final CharSequence text = getLayout().getText();
-//
-//        for (int i = 0, startIndex = 0; i < lineCount; i++) {
-//            final int endIndex = getLayout().getLineEnd(i);
-//            CharSequence line = text.subSequence(startIndex, endIndex);
-//            startIndex = endIndex;
-//            float width = getPaint().measureText(line.toString());
-//            widths.add(i, width);
-//        }
-//
-//        getLineBounds(0, bounds);
-//        float firstLineWidth = widths.get(0);
-//        path.moveTo(bounds.exactCenterX(), bounds.top);
-//
-//        for (int i = 0; i < lineCount; i++) {
-//
-//            getLineBounds(i, bounds);
-//            float width = widths.get(i);
-//
-//            path.lineTo(bounds.exactCenterX() + width / 2, bounds.top);
-//            path.lineTo(bounds.exactCenterX() + width / 2, bounds.bottom);
-//        }
-//
-//
-//        float lastLineWidth = widths.get(lineCount - 1);
-//        getLineBounds(lineCount - 1, bounds);
-//        path.lineTo(bounds.exactCenterX() - lastLineWidth / 2, bounds.bottom);
-//
-//        for (int i = getLineCount() - 1; i >= 0; i--) {
-//            getLineBounds(i, bounds);
-//            float width = widths.get(i);
-//
-//            path.lineTo(bounds.exactCenterX() - width / 2, bounds.top);
-//
-//            if (i - 1 >= 0) {
-//                getLineBounds(i - 1, bounds);
-//                width = widths.get(i - 1);
-//                path.lineTo(bounds.exactCenterX() - width / 2, bounds.bottom);
-//            }
-//        }
-//
-//        getLineBounds(0, bounds);
-//        path.lineTo(bounds.exactCenterX() + firstLineWidth / 2, bounds.top);
-//        path.lineTo(bounds.exactCenterX() + firstLineWidth / 2, bounds.exactCenterY());
-//
-//        canvas.drawPath(path, backgroundPaint);
-//    }
 }

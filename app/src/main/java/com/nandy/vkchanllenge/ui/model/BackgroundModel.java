@@ -1,6 +1,8 @@
 package com.nandy.vkchanllenge.ui.model;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.nandy.vkchanllenge.ui.Background;
 import com.nandy.vkchanllenge.ui.Highlight;
 import com.nandy.vkchanllenge.ui.Part;
@@ -48,14 +51,14 @@ public class BackgroundModel {
         return Background.values();
     }
 
-    public Highlight highlightText(){
+    public Highlight highlightText() {
 
         highlightIndex = ++highlightIndex < background.getHighlights().length ? highlightIndex : 0;
         return background.getHighlights()[highlightIndex];
 
     }
 
-    public Highlight getHighlight(){
+    public Highlight getHighlight() {
         return background.getHighlights()[highlightIndex];
     }
 
@@ -88,6 +91,7 @@ public class BackgroundModel {
             BitmapFactory.Options opts = new BitmapFactory.Options();
             opts.inDensity = DisplayMetrics.DENSITY_HIGH;
             return Drawable.createFromResourceStream(context.getResources(), null, ims, name, opts);
+
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -158,13 +162,13 @@ public class BackgroundModel {
         return Uri.parse(pathToImage).getPath();
     }
 
-
     public String getOutputFromCamera() {
 
         return new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg").getPath();
     }
 
-
-
+    public boolean hasFileSystemAccessPermission() {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
 
 }
