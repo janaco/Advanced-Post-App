@@ -157,6 +157,12 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
             }
         });
 
+        if (tabLayout.getSelectedTabPosition() == 0){
+            applyPostStyle();
+        }else {
+            applyStoryStyle();
+        }
+
 
     }
 
