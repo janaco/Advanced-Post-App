@@ -26,7 +26,7 @@ public class HighlightedEditText extends android.support.v7.widget.AppCompatEdit
     private Path path;
     private List<Float> widths = new ArrayList<>();
 
-    private Highlight highlightStyle = Highlight.NONE;
+    private Highlight highlightStyle = Highlight.NONE_NEGATIVE;
 
 
     public HighlightedEditText(Context context) {

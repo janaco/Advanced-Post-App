@@ -38,7 +38,7 @@ public class BackgroundModel {
 
     private Context context;
     private Background background = Background.WHITE;
-    private int highlightIndex = 0;
+    private int highlightIndex = Highlight.NONE_NEGATIVE.getIndex();
 
     public BackgroundModel(Context context) {
         this.context = context;
@@ -49,14 +49,14 @@ public class BackgroundModel {
     }
 
     public Highlight highlightText(){
-        highlightIndex = highlightIndex < background.getHighlights().length ? highlightIndex : 0;
-        return background.getHighlights()[highlightIndex++];
+
+        highlightIndex = ++highlightIndex < background.getHighlights().length ? highlightIndex : 0;
+        return background.getHighlights()[highlightIndex];
 
     }
 
-    public Highlight resetHighlight(){
-        highlightIndex = Highlight.NONE.getIndex();
-        return background.getHighlights()[highlightIndex++];
+    public Highlight getHighlight(){
+        return background.getHighlights()[highlightIndex];
     }
 
     @Nullable

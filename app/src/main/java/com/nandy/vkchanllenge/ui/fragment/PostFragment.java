@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -148,7 +147,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
 
 
         textView.setCornerRadius(scaledDensity * 4);
-        textView.setHighlightStyle(Highlight.WHITE_INVERTED);
+        textView.setHighlightStyle(Highlight.NONE_NEGATIVE);
         textView.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence text, int length) {
@@ -161,7 +160,6 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         } else {
             applyStoryStyle();
         }
-
 
     }
 
@@ -262,13 +260,6 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
     public void addBackgroundPart(ImageView imageView) {
         viewFon.addView(imageView);
         imageParts.add(imageView);
-    }
-
-    @Override
-    public void onPostResult(boolean success) {
-        //TODO: it's temporary implementation
-        Toast.makeText(getContext(), success ? "Successfully saved" : "Failed to save", Toast.LENGTH_SHORT).show();
-
     }
 
 

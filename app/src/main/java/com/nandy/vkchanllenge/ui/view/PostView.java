@@ -30,8 +30,6 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
 
     void showStickersPopup(List<Bitmap> stickers, StickersDialog.OnStickerSelectedListener listener);
 
-    void onPostResult(boolean success);
-
     void addSticker(ImageView imageView);
 
     void addBackgroundPart(ImageView imageView);

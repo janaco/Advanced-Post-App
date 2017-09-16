@@ -11,10 +11,11 @@ import com.nandy.vkchanllenge.R;
 public enum Highlight {
 
     WHITE(0, R.color.white, R.color.black),
-    WHITE_INVERTED(0, R.color.black, R.color.white),
+    WHITE_NEGATIVE(0, R.color.black, R.color.white),
     TRANSPARENT(1, R.color.white_a24, R.color.white),
-    TRANSPARENT_INVERTED(1, R.color.black_a24, R.color.white),
-    NONE(2, R.color.transparent, R.color.white);
+    TRANSPARENT_NEGATIVE(1, R.color.black_a24, R.color.white),
+    NONE(2, R.color.transparent, R.color.white),
+    NONE_NEGATIVE(2, R.color.transparent, R.color.black);
 
     @ColorRes
     private int backgroundColor;

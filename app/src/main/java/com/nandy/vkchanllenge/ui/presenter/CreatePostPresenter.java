@@ -58,6 +58,7 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
     @Override
     public void start() {
         view.setThumbnails(backgroundModel.getThumbnails());
+        onThumbnailSelected(Background.WHITE);
         stickersSubscription = stickersModel.loadStickers().subscribe();
 
     }
@@ -77,7 +78,6 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
     }
 
     public void onThumbnailSelected(Background background) {
-        view.highlight(backgroundModel.resetHighlight());
         if (background.getType() == BackgroundType.CUSTOM) {
             return;
         }
@@ -90,6 +90,7 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
             }
 
         }
+        view.highlight(backgroundModel.getHighlight());
     }
 
     @Override
