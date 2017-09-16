@@ -2,6 +2,7 @@ package com.nandy.vkchanllenge;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -43,6 +44,10 @@ public class RoundedBackgroundSpan extends ReplacementSpan {
         bottom = bottom + paddingBottom;
 
         RectF rect = new RectF(left, top, right, bottom);
+
+        CornerPathEffect pathEffect = new CornerPathEffect(cornerRadius);
+
+        paint.setPathEffect(pathEffect);
         paint.setColor(backgroundColor);
         canvas.drawRoundRect(rect, cornerRadius, cornerRadius, paint);
 

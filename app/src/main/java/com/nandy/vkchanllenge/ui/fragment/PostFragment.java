@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.nandy.vkchanllenge.HighlightedEditText;
 import com.nandy.vkchanllenge.MainActivity;
 import com.nandy.vkchanllenge.MyFragment;
 import com.nandy.vkchanllenge.OnListItemClickListener;
@@ -65,7 +66,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         OnListItemClickListener<Background> {
 
     @BindView(R.id.text_view)
-    EditText textView;
+    HighlightedEditText textView;
     @BindView(R.id.content)
     RelativeLayout contentView;
     @BindView(R.id.fon)
@@ -175,6 +176,8 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
 
     @OnClick(R.id.btn_font)
     void onFontButtonClick() {
+
+
         presenter.highlightText(textView.getLayout());
 
     }
