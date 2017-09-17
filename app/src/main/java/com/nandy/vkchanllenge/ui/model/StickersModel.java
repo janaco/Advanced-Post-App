@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.nandy.vkchanllenge.R;
+import com.nandy.vkchanllenge.ui.Background;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +45,7 @@ public class StickersModel {
     private final List<Bitmap> stickers = new ArrayList<>();
     private StickerTouchListener stickerTouchListener;
     private ImageView viewTrash;
+    private boolean highlightTrashView;
 
     private float scaledDensity;
     private int trashPadding = 30;
@@ -58,18 +60,22 @@ public class StickersModel {
         trashPadding *= scaledDensity;
 
         viewTrash = new ImageView(context);
-        viewTrash.setImageResource(R.drawable.ic_trash);
         int size = (int) scaledDensity * 48;
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(size, size);
-        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        params.bottomMargin = (int) scaledDensity * 10;
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        params.bottomMargin = (int) scaledDensity * 16;
         viewTrash.setLayoutParams(params);
     }
 
 
     public void setStickerTouchListener(StickerTouchListener stickerTouchListener) {
         this.stickerTouchListener = stickerTouchListener;
+    }
+
+
+    public void setHighlightTrashView(boolean highlightTrashView) {
+        this.highlightTrashView = highlightTrashView;
     }
 
     public Single<List<Bitmap>> loadStickers() {
@@ -167,6 +173,7 @@ public class StickersModel {
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .map(aBoolean -> {
+                                viewTrash.setImageResource(highlightTrashView ? R.drawable.ic_trash_highlighted : R.drawable.ic_trash);
                                 stickerTouchListener.showTrash(viewTrash);
                                 return true;
                             })
@@ -196,7 +203,7 @@ public class StickersModel {
                 case MotionEvent.ACTION_POINTER_UP:
                     mode = NONE;
                     lastEvent = null;
-                    viewTrash.setImageResource(R.drawable.ic_trash);
+                    viewTrash.setImageResource(highlightTrashView ? R.drawable.ic_trash_highlighted : R.drawable.ic_trash);
                     stickerTouchListener.remove(viewTrash);
                     if (remove) {
                         stickerTouchListener.remove(view);
@@ -233,7 +240,7 @@ public class StickersModel {
 
                     if (x + trashPadding > trashXLeft && x - trashPadding < trashXRight
                             && y + trashPadding > trashYTop && y - trashPadding < trashYBottom) {
-                        viewTrash.setImageResource(R.drawable.ic_trash_released);
+                        viewTrash.setImageResource(highlightTrashView ? R.drawable.ic_trash_released_highlighted : R.drawable.ic_trash_released);
                         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewTrash.getLayoutParams();
                         params.width = (int) (TRASH_RELEASED_SIZE * scaledDensity);
                         params.height = (int) (TRASH_RELEASED_SIZE * scaledDensity);
@@ -242,7 +249,7 @@ public class StickersModel {
                         remove = true;
 
                     } else {
-                        viewTrash.setImageResource(R.drawable.ic_trash);
+                        viewTrash.setImageResource(highlightTrashView ? R.drawable.ic_trash_highlighted : R.drawable.ic_trash);
                         view.setAlpha(1f);
                         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewTrash.getLayoutParams();
                         params.width = (int) (TRASH_SIZE * scaledDensity);

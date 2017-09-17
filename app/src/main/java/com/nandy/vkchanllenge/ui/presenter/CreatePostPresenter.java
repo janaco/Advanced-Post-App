@@ -105,6 +105,7 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
 
     private void onThumbnailSelected(Background background) {
 
+        stickersModel.setHighlightTrashView(background == Background.WHITE);
 
         if (background.getType() == BackgroundType.CUSTOM) {
             return;

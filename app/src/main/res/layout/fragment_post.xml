@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <ImageView
 
                 android:id="@+id/background_view"
@@ -50,16 +51,6 @@
                 android:shadowDy="0.5"
                 android:textColorHint="@color/black_a24" />
 
-
-            <ImageView
-                android:id="@+id/trash"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|bottom"
-                android:layout_marginBottom="10dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_trash"
-                android:visibility="gone" />
 
         </RelativeLayout>
 

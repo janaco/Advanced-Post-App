@@ -78,7 +78,6 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
     @BindView(R.id.bottom_bar)
     View toolbarBottom;
 
-
     private PostType postType;
 
     private final List<ImageView> imageParts = new ArrayList<>();
@@ -224,6 +223,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         }
         imageParts.clear();
         backgroundView.setImageDrawable(background);
+
     }
 
     @Override
@@ -259,7 +259,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
 
     @Override
     public void addBackgroundPart(ImageView imageView) {
-        viewFon.addView(imageView);
+        viewFon.addView(imageView, 1);
         imageParts.add(imageView);
     }
 
