@@ -60,11 +60,11 @@ public class StickersDialog extends Dialog {
     }
 
 
-    public void setStickers(List<Bitmap> stickers) {
+    private void setStickers(List<Bitmap> stickers) {
         this.stickers = stickers;
     }
 
-    public void setOnStickerSelectedListener(OnStickerSelectedListener onStickerSelectedListener) {
+    private void setOnStickerSelectedListener(OnStickerSelectedListener onStickerSelectedListener) {
         this.onStickerSelectedListener = onStickerSelectedListener;
     }
 

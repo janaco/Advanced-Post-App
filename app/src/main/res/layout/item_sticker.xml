@@ -7,7 +7,6 @@
     <ImageView
         android:contentDescription="@string/sticker"
         android:layout_width="wrap_content"
-        android:src="@mipmap/bg_stars_center"
         android:layout_height="wrap_content"
         android:id="@+id/sticker"/>
 

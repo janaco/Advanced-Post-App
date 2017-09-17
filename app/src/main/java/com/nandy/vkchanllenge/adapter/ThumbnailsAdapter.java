@@ -1,13 +1,9 @@
 package com.nandy.vkchanllenge.adapter;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -15,13 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.nandy.vkchanllenge.OnListItemClickListener;
 import com.nandy.vkchanllenge.R;
-import com.nandy.vkchanllenge.ui.Background;
-import com.nandy.vkchanllenge.ui.BackgroundType;
+import com.nandy.vkchanllenge.imagetransformation.RoundedCornersTransformation;
+import com.nandy.vkchanllenge.util.WindowUtils;
+import com.nandy.vkchanllenge.model.Background;
+import com.nandy.vkchanllenge.model.BackgroundType;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,21 +29,33 @@ import butterknife.ButterKnife;
 
 public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.ViewHolder> {
 
-    private Background[] backgrounds;
+    private final Background[] backgrounds;
     private OnListItemClickListener<Background> onListItemClickListener;
 
     private int checkedPosition = 0;
-    private int scale = 3;
 
+    private final int innerMargin;
+    private final int outerMargin;
+    private final int imageSize;
+    private final int cornerRadius;
+    private final int borderWidth;
+    private final int borderMargin;
+    private final int borderColor;
 
-    public ThumbnailsAdapter(Background[] backgrounds) {
+    public ThumbnailsAdapter(Context context, Background[] backgrounds) {
         this.backgrounds = backgrounds;
-    }
 
-    public void setScale(int scale) {
-        this.scale = scale;
-    }
+        int density = (int) WindowUtils.getDensity(context);
 
+        innerMargin = density * 6;
+        outerMargin = density * 16;
+        imageSize = density * 32;
+        cornerRadius = 4 * density;
+        borderWidth = 2 * density;
+        borderMargin = 2 * density;
+        borderColor = ContextCompat.getColor(context, R.color.cornflower_blue_two);
+
+    }
 
     public void setSelected(Background selected) {
         for (int i = 0; i < backgrounds.length; i++) {
@@ -68,14 +77,13 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
 
         Background background = backgrounds[position];
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.thumbnailView.getLayoutParams();
-        int margin = scale * 6;
         if (position == 0) {
-            layoutParams.setMargins(scale * 16, margin, margin, margin);
+            layoutParams.setMargins(outerMargin, innerMargin, innerMargin, innerMargin);
         } else if (position == getItemCount() - 1) {
-            layoutParams.setMargins(margin, margin, scale * 16, margin);
+            layoutParams.setMargins(innerMargin, innerMargin, outerMargin, innerMargin);
 
         } else {
-            layoutParams.setMargins(margin, margin, margin, margin);
+            layoutParams.setMargins(innerMargin, innerMargin, innerMargin, innerMargin);
         }
         holder.thumbnailView.setLayoutParams(layoutParams);
 
@@ -84,7 +92,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
         if (background.getType() != BackgroundType.ASSET) {
             Drawable drawable = ContextCompat.getDrawable(holder.thumbnailView.getContext(), background.getThumbnailId());
             if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-                bitmap = Bitmap.createBitmap(scale * 32, scale * 32, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+                bitmap = Bitmap.createBitmap(imageSize, imageSize, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
             } else {
                 bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
             }
@@ -100,10 +108,9 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
 
 
         if (position == checkedPosition) {
-            bitmap = transform(bitmap, true, scale * 2, scale * 4, scale * 2, ContextCompat.getColor(holder.thumbnailView.getContext(), R.color.cornflower_blue_two));
+            bitmap = RoundedCornersTransformation.transform(bitmap, imageSize, true, cornerRadius, borderWidth, borderMargin, borderColor);
         } else {
-            bitmap = transform(bitmap, false, 0, scale * 4, 0, ContextCompat.getColor(holder.thumbnailView.getContext(), R.color.cornflower_blue_two));
-
+            bitmap = RoundedCornersTransformation.transform(bitmap, imageSize, false, cornerRadius, 0, 0, borderColor);
         }
 
 
@@ -118,40 +125,6 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
 
     }
 
-
-    private Bitmap transform(Bitmap source, boolean checked, int margin, int radius, int border, int color) {
-
-        int width = scale * 32;
-        int height = scale * 32;
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setShader(new BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
-
-        float right = width - margin;
-        float bottom = height - margin;
-
-        if (checked) {
-            Paint strokePaint = new Paint();
-            strokePaint.setStyle(Paint.Style.STROKE);
-            strokePaint.setColor(Color.WHITE);
-            strokePaint.setStrokeWidth(border);
-
-            canvas.drawRect(new RectF(margin * 2, margin * 2, width - margin * 2, height - margin * 2), paint);
-
-            canvas.drawRoundRect(new RectF(margin, margin, width - margin, height - margin), radius, radius, strokePaint);
-
-            strokePaint.setColor(color);
-            canvas.drawRoundRect(new RectF(margin / 2, margin / 2, width - margin / 2, height - margin / 2), radius, radius, strokePaint);
-
-        } else {
-            canvas.drawRoundRect(new RectF(margin, margin, right, bottom), radius, radius, paint);
-        }
-        return bitmap;
-    }
 
     @Override
     public int getItemCount() {

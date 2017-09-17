@@ -1,4 +1,4 @@
-package com.nandy.vkchanllenge.ui;
+package com.nandy.vkchanllenge.model;
 
 /**
  * Created by yana on 09.09.17.

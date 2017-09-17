@@ -1,11 +1,9 @@
 package com.nandy.vkchanllenge.ui.presenter;
 
-import com.nandy.vkchanllenge.BasePresenter;
+import com.nandy.vkchanllenge.ui.BasePresenter;
 import com.nandy.vkchanllenge.api.VkApi;
 import com.nandy.vkchanllenge.ui.model.PostModel;
 import com.nandy.vkchanllenge.ui.view.PublishView;
-
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created by yana on 15.09.17.

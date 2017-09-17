@@ -5,11 +5,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.adapter.ImagesAdapter;
-import com.nandy.vkchanllenge.ui.dialog.BottomPopupWindow;
+import com.nandy.vkchanllenge.ui.BottomPopupWindow;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
 
 import butterknife.BindView;
@@ -24,13 +23,12 @@ public class BackgroundPickerView extends BottomPopupWindow {
 
     @BindView(R.id.images_list)
     RecyclerView imagesList;
-
-    private ImagesAdapter.OnBackgroundChooseListener onItemClickListener;
-
     private ImagesAdapter adapter;
 
     private Disposable imagesSubscription;
     private BackgroundModel backgroundModel;
+
+    private ImagesAdapter.OnBackgroundChooseListener onItemClickListener;
 
 
     public BackgroundPickerView(View parentView) {
@@ -56,7 +54,7 @@ public class BackgroundPickerView extends BottomPopupWindow {
         imagesList.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false));
 
         imagesSubscription = backgroundModel.loadImages().subscribe(files -> {
-            adapter = new ImagesAdapter(files);
+            adapter = new ImagesAdapter(view.getContext(), files);
             adapter.setOnItemClickListener(onItemClickListener);
             imagesList.setAdapter(adapter);
 

@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -25,15 +26,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.nandy.vkchanllenge.HighlightedEditText;
-import com.nandy.vkchanllenge.MyFragment;
-import com.nandy.vkchanllenge.PostType;
+import com.nandy.vkchanllenge.widget.HighlightedEditText;
+import com.nandy.vkchanllenge.model.PostType;
 import com.nandy.vkchanllenge.R;
 import com.nandy.vkchanllenge.SimpleOnTabSelectedListener;
 import com.nandy.vkchanllenge.SimpleTextWatcher;
 import com.nandy.vkchanllenge.adapter.ThumbnailsAdapter;
-import com.nandy.vkchanllenge.ui.Background;
-import com.nandy.vkchanllenge.ui.Highlight;
+import com.nandy.vkchanllenge.model.Background;
+import com.nandy.vkchanllenge.model.Highlight;
 import com.nandy.vkchanllenge.ui.dialog.BackgroundPickerView;
 import com.nandy.vkchanllenge.ui.dialog.StickersDialog;
 import com.nandy.vkchanllenge.ui.model.BackgroundModel;
@@ -45,19 +45,16 @@ import com.nandy.vkchanllenge.ui.view.PostView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.functions.Function;
 
 /**
  * Created by yana on 07.09.17.
  */
 
-public class PostFragment extends MyFragment implements PostView<CreatePostPresenter> {
+public class PostFragment extends Fragment implements PostView<CreatePostPresenter> {
 
     @BindView(R.id.text_view)
     HighlightedEditText textView;
@@ -117,7 +114,6 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         tabStory.setText(R.string.story);
         tabStory.setTag(R.string.story);
 
-
         tabLayout.addTab(tabPost);
         tabLayout.addTab(tabStory);
 
@@ -148,7 +144,6 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
         pickerView = new BackgroundPickerView(view);
         pickerView.setBackgroundModel(new BackgroundModel(getContext()));
         pickerView.setOnItemClickListener(presenter);
-
 
         textView.setCornerRadius(scaledDensity * 4);
         textView.setHighlightStyle(Highlight.NONE_NEGATIVE);
@@ -210,8 +205,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
 
     @Override
     public void setThumbnails(Background[] background) {
-        thumbnailsAdapter = new ThumbnailsAdapter(background);
-        thumbnailsAdapter.setScale((int) scaledDensity);
+        thumbnailsAdapter = new ThumbnailsAdapter(getContext(), background);
         thumbnailsAdapter.setOnListItemClickListener(presenter);
         thumbnailsList.setAdapter(thumbnailsAdapter);
     }
@@ -328,13 +322,12 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
             Matrix matrix = child.getImageMatrix();
             float[] values = new float[9];
             matrix.getValues(values);
-            float x = values[Matrix.MTRANS_X];
             float y = values[Matrix.MTRANS_Y];
 
             int imgHeight = child.getDrawable().getIntrinsicHeight();
 
-            if (y > 1920 / 2) {
-                float bottomMargin = 1920 - y - imgHeight;
+            if (y > screenHeight / 2) {
+                float bottomMargin = screenHeight - y - imgHeight;
                 float dy = 1080 - bottomMargin - imgHeight;
                 float translation = dy - y;
 
@@ -364,7 +357,6 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
     void applyStoryStyle() {
         postType = PostType.STORY;
 
-
         for (int i = 0; i < contentView.getChildCount(); i++) {
             ImageView child = (ImageView) contentView.getChildAt(i);
             Matrix matrix = child.getImageMatrix();
@@ -377,7 +369,7 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
 
             if (y > 1080 / 2) {
                 float bottomMargin = 1080 - y - imgHeight;
-                float dy = 1920 - bottomMargin - imgHeight;
+                float dy = screenHeight - bottomMargin - imgHeight;
                 float translation = dy - y;
 
                 Matrix displayMatrix = new Matrix();
@@ -387,8 +379,6 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
                 child.setImageMatrix(displayMatrix);
 
             }
-
-
         }
 
 

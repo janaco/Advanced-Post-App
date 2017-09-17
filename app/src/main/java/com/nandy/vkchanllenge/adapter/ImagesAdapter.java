@@ -1,9 +1,9 @@
 package com.nandy.vkchanllenge.adapter;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +13,8 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.nandy.vkchanllenge.R;
-import com.nandy.vkchanllenge.RoundedCornersTransformation;
+import com.nandy.vkchanllenge.imagetransformation.RoundedCornersTransformation;
+import com.nandy.vkchanllenge.util.WindowUtils;
 
 import java.io.File;
 import java.util.List;
@@ -31,27 +32,40 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     private static final int VIEW_ALBUM = 1;
     private static final int VIEW_IMAGE = 2;
 
-
-    private List<String> files;
-    private int checkedPosition = VIEW_IMAGE;
+    private final List<String> files;
+    private final Context context;
     private OnBackgroundChooseListener onItemClickListener;
 
-    private int scale = 3;
+    private int checkedPosition = VIEW_IMAGE;
+    private final int margin;
+    private final int sideMargin;
+    private final int imageSize;
+    private final int cornerRadius;
+    private final int borderWidth;
+    private final int borderMargin;
 
-    public ImagesAdapter(List<String> files) {
+    private final int borderColor;
+
+    public ImagesAdapter(Context context, List<String> files) {
         this.files = files;
+        this.context = context;
+
+        int density = (int) WindowUtils.getDensity(context);
+        margin = 4 * density;
+        sideMargin = 16 * density;
+        imageSize = 84 * density;
+        cornerRadius = 4 * density;
+        borderWidth = 2 * density;
+        borderMargin = 2 * density;
+        borderColor = ContextCompat.getColor(context, R.color.cornflower_blue_two);
     }
 
     public void setOnItemClickListener(OnBackgroundChooseListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setScale(int scale) {
-        this.scale = scale;
-    }
-
     public String getSelected() {
-        return files.get(checkedPosition-2);
+        return files.get(checkedPosition - 2);
     }
 
     @Override
@@ -64,53 +78,9 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        String path = null;
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.imageView.getLayoutParams();
+        setupMargins(holder, position);
 
-        int margin = 4 * scale;
-        if (position == 0 || position == 1) {
-            params.setMargins(16*scale, margin, margin, margin);
-        } else if (position == getItemCount() - 1) {
-            params.setMargins(margin, margin,margin*16,margin);
-        } else {
-            params.setMargins(margin, margin, margin, margin);
-        }
-        holder.imageView.setLayoutParams(params);
-
-        if (position == VIEW_CAMERA) {
-
-            holder.imageView.setImageResource(R.drawable.thumb_camera);
-        } else if (position == VIEW_ALBUM) {
-            holder.imageView.setImageResource(R.drawable.thumb_gallery);
-        } else {
-
-            boolean checked = position == checkedPosition;
-            position -= 2;
-            path = files.get(position);
-
-
-            if (checked) {
-
-                Glide
-                        .with(holder.imageView.getContext())
-                        .load(Uri.fromFile(new File(path)))
-                        .override(scale*84, scale*84)
-                        .bitmapTransform(new CenterCrop(holder.imageView.getContext()),
-                                new RoundedCornersTransformation(holder.imageView.getContext(), scale*4, scale*2, ContextCompat.getColor(holder.imageView.getContext(), R.color.cornflower_blue_two), scale*2))
-                        .into(holder.imageView);
-            } else {
-
-                Glide
-                        .with(holder.imageView.getContext())
-                        .load(Uri.fromFile(new File(path)))
-                        .override(scale*84, scale*84)
-                        .bitmapTransform(new CenterCrop(holder.imageView.getContext()),
-                                new RoundedCornersTransformation(holder.imageView.getContext(), scale*4, 0))
-                        .into(holder.imageView);
-            }
-        }
-
-        String finalPath = path;
+        String path = loadImage(holder, position);
         holder.imageView.setOnClickListener(view -> {
 
             switch (holder.getAdapterPosition()) {
@@ -124,12 +94,51 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
                     break;
 
                 default:
-                    onItemClickListener.onImageSelected(finalPath);
+                    onItemClickListener.onImageSelected(path);
                     checkedPosition = holder.getAdapterPosition();
                     notifyDataSetChanged();
                     break;
             }
         });
+    }
+
+    private void setupMargins(ViewHolder holder, int position) {
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.imageView.getLayoutParams();
+
+        if (position == 0 || position == 1) {
+            params.setMargins(sideMargin, margin, margin, margin);
+        } else if (position == getItemCount() - 1) {
+            params.setMargins(margin, margin, sideMargin, margin);
+        } else {
+            params.setMargins(margin, margin, margin, margin);
+        }
+        holder.imageView.setLayoutParams(params);
+    }
+
+    private String loadImage(ViewHolder holder, int position) {
+        if (position == VIEW_CAMERA) {
+            holder.imageView.setImageResource(R.drawable.thumb_camera);
+        } else if (position == VIEW_ALBUM) {
+            holder.imageView.setImageResource(R.drawable.thumb_gallery);
+        } else {
+            boolean checked = position == checkedPosition;
+            position -= 2;
+            String path = files.get(position);
+
+            Glide
+                    .with(context)
+                    .load(Uri.fromFile(new File(path)))
+                    .override(imageSize, imageSize)
+                    .bitmapTransform(new CenterCrop(context),
+                            checked ?
+                                    new RoundedCornersTransformation(context, cornerRadius, borderMargin, borderColor, borderWidth)
+                                    : new RoundedCornersTransformation(context, cornerRadius, 0))
+                    .into(holder.imageView);
+            return path;
+        }
+
+        return null;
+
     }
 
     @Override

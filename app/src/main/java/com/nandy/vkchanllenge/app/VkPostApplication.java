@@ -1,9 +1,10 @@
-package com.nandy.vkchanllenge;
+package com.nandy.vkchanllenge.app;
 
 import android.app.Application;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.nandy.vkchanllenge.acitivity.MainActivity;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;

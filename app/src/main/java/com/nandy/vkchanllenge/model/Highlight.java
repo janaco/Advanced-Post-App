@@ -1,4 +1,4 @@
-package com.nandy.vkchanllenge.ui;
+package com.nandy.vkchanllenge.model;
 
 import android.support.annotation.ColorRes;
 

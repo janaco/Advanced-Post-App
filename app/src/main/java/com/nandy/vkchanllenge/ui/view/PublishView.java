@@ -1,6 +1,6 @@
 package com.nandy.vkchanllenge.ui.view;
 
-import com.nandy.vkchanllenge.BaseView;
+import com.nandy.vkchanllenge.ui.BaseView;
 import com.nandy.vkchanllenge.ui.presenter.PublishPresenter;
 
 /**

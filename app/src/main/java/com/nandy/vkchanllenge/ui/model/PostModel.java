@@ -1,29 +1,12 @@
 package com.nandy.vkchanllenge.ui.model;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Environment;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.Pair;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 
-import com.nandy.vkchanllenge.PostType;
+import com.nandy.vkchanllenge.model.PostType;
 import com.nandy.vkchanllenge.api.VkApi;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by yana on 09.09.17.

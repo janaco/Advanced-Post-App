@@ -1,4 +1,4 @@
-package com.nandy.vkchanllenge;
+package com.nandy.vkchanllenge.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,7 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
-import com.nandy.vkchanllenge.ui.Highlight;
+import com.nandy.vkchanllenge.model.Highlight;
 
 import java.util.ArrayList;
 import java.util.List;

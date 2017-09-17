@@ -1,4 +1,4 @@
-package com.nandy.vkchanllenge;
+package com.nandy.vkchanllenge.imagetransformation;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -102,39 +102,19 @@ public class RoundedCornersTransformation implements Transformation<Bitmap> {
         }
     }
 
-
-//    private void drawBorder(Canvas canvas, Paint paint, float right,
-//                            float bottom) {
-//
-//        // stroke
-//        Paint strokePaint = new Paint();
-//        strokePaint.setStyle(Paint.Style.STROKE);
-//        strokePaint.setColor(mColor);
-//        strokePaint.setStrokeWidth(mBorder);
-//
-//        canvas.drawRect(new RectF(mMargin, mMargin, right, bottom), paint);
-//
-//        // stroke
-//        canvas.drawRoundRect(new RectF(mMargin, mMargin, right, bottom), mRadius, mRadius, strokePaint);
-//    }
-
-
     private void drawBorder(Canvas canvas, Paint paint, float width,
                             float height) {
 
-        // stroke
         Paint strokePaint = new Paint();
         strokePaint.setStyle(Paint.Style.STROKE);
         strokePaint.setColor(Color.WHITE);
         strokePaint.setStrokeWidth(mBorder);
 
-        canvas.drawRect(new RectF(mMargin*2, mMargin*2, width-mMargin*2, height-mMargin*2),  paint);
+        canvas.drawRect(new RectF(mMargin * 2, mMargin * 2, width - mMargin * 2, height - mMargin * 2), paint);
 
-        canvas.drawRoundRect(new RectF(mMargin, mMargin, width-mMargin, height-mMargin), mRadius, mRadius, strokePaint);
+        canvas.drawRoundRect(new RectF(mMargin, mMargin, width - mMargin, height - mMargin), mRadius, mRadius, strokePaint);
 
         strokePaint.setColor(mColor);
-        // stroke
-        canvas.drawRoundRect(new RectF(mMargin/2, mMargin/2, width - mMargin/2, height - mMargin/2), mRadius, mRadius, strokePaint);
     }
 
 
@@ -142,4 +122,37 @@ public class RoundedCornersTransformation implements Transformation<Bitmap> {
         return "RoundedTransformation(radius=" + mRadius + ", margin=" + mMargin + ", diameter="
                 + mDiameter + ", cornerType=" + mCornerType.name() + ")";
     }
+
+    public static Bitmap transform(Bitmap source, int imageSize, boolean withBorder, int radius, int border, int margin, int color) {
+
+
+        Bitmap bitmap = Bitmap.createBitmap(imageSize, imageSize, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setShader(new BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
+
+        float right = imageSize - margin;
+        float bottom = imageSize - margin;
+
+        if (withBorder) {
+            Paint strokePaint = new Paint();
+            strokePaint.setStyle(Paint.Style.STROKE);
+            strokePaint.setColor(Color.WHITE);
+            strokePaint.setStrokeWidth(border);
+
+            canvas.drawRect(new RectF(margin * 2, margin * 2, imageSize - margin * 2, imageSize - margin * 2), paint);
+
+            canvas.drawRoundRect(new RectF(margin, margin, imageSize - margin, imageSize - margin), radius, radius, strokePaint);
+
+            strokePaint.setColor(color);
+            canvas.drawRoundRect(new RectF(margin / 2, margin / 2, imageSize - margin / 2, imageSize - margin / 2), radius, radius, strokePaint);
+
+        } else {
+            canvas.drawRoundRect(new RectF(margin, margin, right, bottom), radius, radius, paint);
+        }
+        return bitmap;
+    }
+
 }

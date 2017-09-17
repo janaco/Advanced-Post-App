@@ -3,13 +3,12 @@ package com.nandy.vkchanllenge.ui.view;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.text.Spannable;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.nandy.vkchanllenge.BaseView;
-import com.nandy.vkchanllenge.ui.Background;
-import com.nandy.vkchanllenge.ui.Highlight;
+import com.nandy.vkchanllenge.ui.BaseView;
+import com.nandy.vkchanllenge.model.Background;
+import com.nandy.vkchanllenge.model.Highlight;
 import com.nandy.vkchanllenge.ui.dialog.StickersDialog;
 
 import java.util.List;

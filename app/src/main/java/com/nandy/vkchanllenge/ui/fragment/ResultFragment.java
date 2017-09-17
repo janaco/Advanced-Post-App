@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nandy.vkchanllenge.MainActivity;
+import com.nandy.vkchanllenge.acitivity.MainActivity;
 import com.nandy.vkchanllenge.R;
 
 import butterknife.BindView;

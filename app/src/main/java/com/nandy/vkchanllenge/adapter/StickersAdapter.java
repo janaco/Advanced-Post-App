@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 
 public class StickersAdapter extends BaseAdapter {
 
-    List<Bitmap> stickers;
+   private final List<Bitmap> stickers;
 
     public StickersAdapter(List<Bitmap> stickers) {
         this.stickers = stickers;

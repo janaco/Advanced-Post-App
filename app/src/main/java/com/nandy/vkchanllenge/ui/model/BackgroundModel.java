@@ -18,10 +18,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
-import com.nandy.vkchanllenge.ui.Background;
-import com.nandy.vkchanllenge.ui.Highlight;
-import com.nandy.vkchanllenge.ui.Part;
+import com.nandy.vkchanllenge.model.Background;
+import com.nandy.vkchanllenge.model.Highlight;
+import com.nandy.vkchanllenge.model.Part;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,25 +44,6 @@ public class BackgroundModel {
 
     public BackgroundModel(Context context) {
         this.context = context;
-    }
-
-    public Background[] getThumbnails() {
-        return Background.values();
-    }
-
-    public Highlight highlightText() {
-
-        highlightIndex = ++highlightIndex < background.getHighlights().length ? highlightIndex : 0;
-        return background.getHighlights()[highlightIndex];
-
-    }
-
-    public void setBackground(Background background) {
-        this.background = background;
-    }
-
-    public Highlight getHighlight() {
-        return background.getHighlights()[highlightIndex];
     }
 
     @Nullable
@@ -173,6 +153,25 @@ public class BackgroundModel {
 
     public boolean hasFileSystemAccessPermission() {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public Highlight getHighlight() {
+        return background.getHighlights()[highlightIndex];
+    }
+
+    public Background[] getThumbnails() {
+        return Background.values();
+    }
+
+    public Highlight highlightText() {
+
+        highlightIndex = ++highlightIndex < background.getHighlights().length ? highlightIndex : 0;
+        return background.getHighlights()[highlightIndex];
+
+    }
+
+    public void setBackground(Background background) {
+        this.background = background;
     }
 
 }

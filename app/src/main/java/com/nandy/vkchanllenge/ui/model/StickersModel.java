@@ -6,18 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.nandy.vkchanllenge.R;
-import com.nandy.vkchanllenge.ui.Background;
+import com.nandy.vkchanllenge.util.WindowUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +24,6 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -42,29 +36,30 @@ public class StickersModel {
     private static final int TRASH_RELEASED_SIZE = 56;
 
     private Context context;
+
     private final List<Bitmap> stickers = new ArrayList<>();
+
     private StickerTouchListener stickerTouchListener;
     private ImageView viewTrash;
-    private boolean highlightTrashView;
 
-    private float scaledDensity;
+    private float density;
     private int trashPadding = 30;
+    private boolean highlightTrashView;
 
     public StickersModel(Context context) {
         this.context = context;
+        density = (int) WindowUtils.getDensity(context);
+        trashPadding *= density;
+        createTrashView();
+    }
 
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        scaledDensity = displayMetrics.scaledDensity;
-        trashPadding *= scaledDensity;
-
+    private void createTrashView(){
         viewTrash = new ImageView(context);
-        int size = (int) scaledDensity * 48;
+        int size = (int) density * 48;
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(size, size);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        params.bottomMargin = (int) scaledDensity * 16;
+        params.bottomMargin = (int) density * 16;
         viewTrash.setLayoutParams(params);
     }
 
@@ -242,8 +237,8 @@ public class StickersModel {
                             && y + trashPadding > trashYTop && y - trashPadding < trashYBottom) {
                         viewTrash.setImageResource(highlightTrashView ? R.drawable.ic_trash_released_highlighted : R.drawable.ic_trash_released);
                         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewTrash.getLayoutParams();
-                        params.width = (int) (TRASH_RELEASED_SIZE * scaledDensity);
-                        params.height = (int) (TRASH_RELEASED_SIZE * scaledDensity);
+                        params.width = (int) (TRASH_RELEASED_SIZE * density);
+                        params.height = (int) (TRASH_RELEASED_SIZE * density);
                         viewTrash.setLayoutParams(params);
                         view.setAlpha(0.48f);
                         remove = true;
@@ -252,8 +247,8 @@ public class StickersModel {
                         viewTrash.setImageResource(highlightTrashView ? R.drawable.ic_trash_highlighted : R.drawable.ic_trash);
                         view.setAlpha(1f);
                         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewTrash.getLayoutParams();
-                        params.width = (int) (TRASH_SIZE * scaledDensity);
-                        params.height = (int) (TRASH_SIZE * scaledDensity);
+                        params.width = (int) (TRASH_SIZE * density);
+                        params.height = (int) (TRASH_SIZE * density);
                         viewTrash.setLayoutParams(params);
                         remove = false;
                     }
@@ -265,30 +260,18 @@ public class StickersModel {
             return true;
         }
 
-        /**
-         * Determine the space between the first two fingers
-         */
         private double spacing(MotionEvent event) {
             float x = event.getX(0) - event.getX(1);
             float y = event.getY(0) - event.getY(1);
             return Math.sqrt(x * x + y * y);
         }
 
-        /**
-         * Calculate the mid point of the first two fingers
-         */
         private void midPoint(PointF point, MotionEvent event) {
             float x = event.getX(0) + event.getX(1);
             float y = event.getY(0) + event.getY(1);
             point.set(x / 2, y / 2);
         }
 
-        /**
-         * Calculate the degree to be rotated by.
-         *
-         * @param event
-         * @return Degrees
-         */
         private float rotation(MotionEvent event) {
             double delta_x = (event.getX(0) - event.getX(1));
             double delta_y = (event.getY(0) - event.getY(1));
