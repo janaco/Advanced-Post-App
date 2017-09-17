@@ -58,6 +58,10 @@ public class BackgroundModel {
 
     }
 
+    public void setBackground(Background background) {
+        this.background = background;
+    }
+
     public Highlight getHighlight() {
         return background.getHighlights()[highlightIndex];
     }

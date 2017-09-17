@@ -47,6 +47,17 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
         this.scale = scale;
     }
 
+
+    public void setSelected(Background selected) {
+        for (int i = 0; i < backgrounds.length; i++) {
+            if (backgrounds[i] == selected) {
+                checkedPosition = i;
+                break;
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_thumbnail, parent, false));
@@ -58,12 +69,12 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
         Background background = backgrounds[position];
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) holder.thumbnailView.getLayoutParams();
         int margin = scale * 6;
-        if (position == 0  ){
-            layoutParams.setMargins(scale *16, margin, margin, margin);
-        }else if (position == getItemCount() - 1){
-            layoutParams.setMargins(margin, margin, scale *16, margin);
+        if (position == 0) {
+            layoutParams.setMargins(scale * 16, margin, margin, margin);
+        } else if (position == getItemCount() - 1) {
+            layoutParams.setMargins(margin, margin, scale * 16, margin);
 
-        }else {
+        } else {
             layoutParams.setMargins(margin, margin, margin, margin);
         }
         holder.thumbnailView.setLayoutParams(layoutParams);
@@ -73,7 +84,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
         if (background.getType() != BackgroundType.ASSET) {
             Drawable drawable = ContextCompat.getDrawable(holder.thumbnailView.getContext(), background.getThumbnailId());
             if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-                bitmap = Bitmap.createBitmap(scale *32, scale *32, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+                bitmap = Bitmap.createBitmap(scale * 32, scale * 32, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
             } else {
                 bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
             }
@@ -83,16 +94,15 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
             drawable.draw(canvas);
 
 
-
         } else {
             bitmap = BitmapFactory.decodeResource(holder.thumbnailView.getContext().getResources(), background.getThumbnailId());
         }
 
 
-        if (position == checkedPosition){
-            bitmap = transform(bitmap, true, scale *2, scale *4, scale *2, ContextCompat.getColor(holder.thumbnailView.getContext(), R.color.cornflower_blue_two));
-        }else {
-            bitmap = transform(bitmap, false, 0, scale *4, 0, ContextCompat.getColor(holder.thumbnailView.getContext(), R.color.cornflower_blue_two));
+        if (position == checkedPosition) {
+            bitmap = transform(bitmap, true, scale * 2, scale * 4, scale * 2, ContextCompat.getColor(holder.thumbnailView.getContext(), R.color.cornflower_blue_two));
+        } else {
+            bitmap = transform(bitmap, false, 0, scale * 4, 0, ContextCompat.getColor(holder.thumbnailView.getContext(), R.color.cornflower_blue_two));
 
         }
 
@@ -109,10 +119,10 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
     }
 
 
-    private Bitmap transform(Bitmap source, boolean checked, int margin, int radius, int border, int color){
+    private Bitmap transform(Bitmap source, boolean checked, int margin, int radius, int border, int color) {
 
-        int width = scale *32;
-        int height = scale *32;
+        int width = scale * 32;
+        int height = scale * 32;
 
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
@@ -124,24 +134,25 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.Vi
         float right = width - margin;
         float bottom = height - margin;
 
-        if (checked){
+        if (checked) {
             Paint strokePaint = new Paint();
             strokePaint.setStyle(Paint.Style.STROKE);
             strokePaint.setColor(Color.WHITE);
             strokePaint.setStrokeWidth(border);
 
-            canvas.drawRect(new RectF(margin*2, margin*2, width-margin*2, height-margin*2),  paint);
+            canvas.drawRect(new RectF(margin * 2, margin * 2, width - margin * 2, height - margin * 2), paint);
 
-            canvas.drawRoundRect(new RectF(margin, margin, width-margin, height-margin), radius, radius, strokePaint);
+            canvas.drawRoundRect(new RectF(margin, margin, width - margin, height - margin), radius, radius, strokePaint);
 
             strokePaint.setColor(color);
-            canvas.drawRoundRect(new RectF(margin/2, margin/2, width - margin/2, height - margin/2), radius, radius, strokePaint);
+            canvas.drawRoundRect(new RectF(margin / 2, margin / 2, width - margin / 2, height - margin / 2), radius, radius, strokePaint);
 
-        }else {
+        } else {
             canvas.drawRoundRect(new RectF(margin, margin, right, bottom), radius, radius, paint);
         }
         return bitmap;
     }
+
     @Override
     public int getItemCount() {
         return backgrounds.length;

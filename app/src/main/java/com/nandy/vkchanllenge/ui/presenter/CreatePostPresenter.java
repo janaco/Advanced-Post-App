@@ -104,6 +104,8 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
     }
 
     private void onThumbnailSelected(Background background) {
+
+
         if (background.getType() == BackgroundType.CUSTOM) {
             return;
         }
@@ -117,6 +119,7 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
 
         }
         view.highlight(backgroundModel.getHighlight());
+
     }
 
     @Override
@@ -142,6 +145,10 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
     @Override
     public void onImageSelected(String path) {
         view.setBackground(path);
+        view.setThumbnailSelected(Background.CUSTOM);
+        backgroundModel.setBackground(Background.CUSTOM);
+        view.highlight(backgroundModel.getHighlight());
+
     }
 
     public void onActivityResult(int requestCode, Intent data) {
@@ -160,7 +167,7 @@ public class CreatePostPresenter implements BasePresenter, StickersDialog.OnStic
         }
 
         if (path != null) {
-            view.setBackground(path);
+            onImageSelected(path);
         }
     }
 

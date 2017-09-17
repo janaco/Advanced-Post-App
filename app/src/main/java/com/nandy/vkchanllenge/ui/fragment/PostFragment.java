@@ -238,6 +238,11 @@ public class PostFragment extends MyFragment implements PostView<CreatePostPrese
     }
 
     @Override
+    public void setThumbnailSelected(Background background) {
+        thumbnailsAdapter.setSelected(background);
+    }
+
+    @Override
     public void highlight(Highlight highlight) {
         textView.setHighlightStyle(highlight);
     }

@@ -51,7 +51,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     }
 
     public String getSelected() {
-        return files.get(checkedPosition);
+        return files.get(checkedPosition-2);
     }
 
     @Override

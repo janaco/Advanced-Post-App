@@ -44,4 +44,5 @@ public interface PostView<Presenter> extends BaseView<Presenter> {
 
     void requestPermission(int requestCode, String... permission);
 
+    void setThumbnailSelected(Background background);
 }
