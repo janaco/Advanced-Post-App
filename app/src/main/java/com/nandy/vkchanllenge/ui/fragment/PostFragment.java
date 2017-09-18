@@ -190,6 +190,7 @@ public class PostFragment extends Fragment implements PostView<CreatePostPresent
     void onSendButtonClick() {
 
         textView.setCursorVisible(false);
+        hideKeyboard();
 
         SendingFragment fragment = new SendingFragment();
 
@@ -281,14 +282,24 @@ public class PostFragment extends Fragment implements PostView<CreatePostPresent
     @Override
     public void showImagesPopup() {
 
-        showKeyboard();
+//        showKeyboard();
         pickerView.showPopup();
 
     }
 
     private void showKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(textView, 0);
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            inputMethodManager.showSoftInput(textView, 0);
+        }
+    }
+
+
+    private void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+        }
     }
 
     @Override
